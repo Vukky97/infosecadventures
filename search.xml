@@ -165,9 +165,9 @@
       
         <tags>
             
-            <tag> cryptography </tag>
-            
             <tag> cipher </tag>
+            
+            <tag> cryptography </tag>
             
         </tags>
       
@@ -250,13 +250,13 @@
       
         <tags>
             
-            <tag> cryptography </tag>
+            <tag> vernam </tag>
             
             <tag> cipher </tag>
             
-            <tag> vernam </tag>
-            
             <tag> encryption </tag>
+            
+            <tag> cryptography </tag>
             
         </tags>
       
@@ -370,9 +370,9 @@
       
         <tags>
             
-            <tag> cryptography </tag>
-            
             <tag> cipher </tag>
+            
+            <tag> cryptography </tag>
             
         </tags>
       
