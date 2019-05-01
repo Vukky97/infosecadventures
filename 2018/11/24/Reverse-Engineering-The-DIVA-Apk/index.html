@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Description DIVA stands for Damn Insecure and Vulnerable Application. This Android application is intentionally vulnerable and created just for testing purposes. You can download the application fr">
+<meta name="keywords" content="security,reverse engineering,android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reverse Engineering The DIVA Apk">
+<meta property="og:url" content="https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="Description DIVA stands for Damn Insecure and Vulnerable Application. This Android application is intentionally vulnerable and created just for testing purposes. You can download the application fr">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/reverse_engineering_the_diva_apk.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Reverse Engineering The DIVA Apk">
+<meta name="twitter:description" content="Description DIVA stands for Damn Insecure and Vulnerable Application. This Android application is intentionally vulnerable and created just for testing purposes. You can download the application fr">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/reverse_engineering_the_diva_apk.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Reverse Engineering The DIVA Apk</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/28/The-Vernam-Cipher/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/17/Toppo-Walkthrough/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&text=Reverse Engineering The DIVA Apk"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&title=Reverse Engineering The DIVA Apk"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Reverse Engineering The DIVA Apk&body=Check out this article: https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&title=Reverse Engineering The DIVA Apk"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Required-tools"><span class="toc-number">1.1.</span> <span class="toc-text">Required tools</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Apktool"><span class="toc-number">1.1.1.</span> <span class="toc-text">Apktool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dex2Jar"><span class="toc-number">1.1.2.</span> <span class="toc-text">Dex2Jar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JD-CMD"><span class="toc-number">1.1.3.</span> <span class="toc-text">JD-CMD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JD-GUI"><span class="toc-number">1.1.4.</span> <span class="toc-text">JD-GUI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decompressing-APK-files"><span class="toc-number">1.2.</span> <span class="toc-text">Decompressing APK files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apktool-to-the-rescue"><span class="toc-number">1.3.</span> <span class="toc-text">Apktool to the rescue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Source-files"><span class="toc-number">1.4.</span> <span class="toc-text">Source files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Reverse Engineering The DIVA Apk
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-24T10:05:35.000Z" itemprop="datePublished">2018.11.24.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Android-Security/">Android Security</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/reverse-engineering/">reverse engineering</a>, <a class="tag-link" href="/tags/security/">security</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="reverse_engineering_the_diva_apk.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><blockquote>
+<p>DIVA stands for Damn Insecure and Vulnerable Application. This Android application is intentionally vulnerable and created just for testing purposes. You can download the application from here: <a href="http://www.payatu.com/wp-content/uploads/2016/01/diva-beta.tar.gz" target="_blank" rel="noopener">http://www.payatu.com/wp-content/uploads/2016/01/diva-beta.tar.gz</a></p>
+</blockquote>
+<h2 id="Required-tools"><a href="#Required-tools" class="headerlink" title="Required tools"></a>Required tools</h2><p>There are some really good tools out there, but I’m going show you my favorite ones.</p>
+<ul>
+<li><h3 id="Apktool"><a href="#Apktool" class="headerlink" title="Apktool"></a><a href="https://ibotpeaches.github.io/Apktool/install/" target="_blank" rel="noopener">Apktool</a></h3></li>
+</ul>
+<p>It’s is used for reverse engineering 3rd party, closed, binary Android apps. You can edit the decompiled .smali code and re-buid the app with you modifications. Even though, it’s not really required to follow along, you should totally check it out!</p>
+<ul>
+<li><h3 id="Dex2Jar"><a href="#Dex2Jar" class="headerlink" title="Dex2Jar"></a><a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="noopener">Dex2Jar</a></h3></li>
+</ul>
+<p>We are going to work with .dex files and it’s the best tool to convert those file to a single JAR, which can be decompiled later on.</p>
+<ul>
+<li><h3 id="JD-CMD"><a href="#JD-CMD" class="headerlink" title="JD-CMD"></a><a href="https://github.com/kwart/jd-cmd" target="_blank" rel="noopener">JD-CMD</a></h3></li>
+</ul>
+<p>My personal favorite java command-line decompiler is <em>jd-cmd</em>. It’s easy to use and has some very handy command line options.</p>
+<ul>
+<li><h3 id="JD-GUI"><a href="#JD-GUI" class="headerlink" title="JD-GUI"></a><a href="http://jd.benow.ca/" target="_blank" rel="noopener">JD-GUI</a></h3></li>
+</ul>
+<p>If you like GUI (Graphical User Interface), then you should download <em>JD-GUI</em>.</p>
+<center>- - - - - - - - - -</center>
+
+<center><em>Note: I’m using Linux, but the tools should work on every platform!</em></center>
+
+<center>- - - - - - - - - -</center>
+
+<h2 id="Decompressing-APK-files"><a href="#Decompressing-APK-files" class="headerlink" title="Decompressing APK files"></a>Decompressing APK files</h2><p>APK stands for Android Package Kit. APK files are saved in a compressed .zip format and can be opened by any zip decompression tool. You can try it by renaming the .apk extension to .zip and decompressing the file. The content will be something like this:</p>
+<pre><code>┌─[t0thkr1s@btksoftware]─[~/Downloads]
+└──╼ $ mv diva-beta.apk diva-beta.zip
+┌─[t0thkr1s@btksoftware]─[~/Downloads]
+└──╼ $ unzip diva-beta.zip -d diva-beta
+Archive:  diva-beta.zip
+  inflating: AndroidManifest.xml     
+  inflating: res/anim/abc_fade_in.xml  
+  inflating: res/anim/abc_fade_out.xml
+
+--- snip ---
+
+┌─[t0thkr1s@btksoftware]─[~/Downloads]
+└──╼ $ cd diva-beta/
+┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta]
+└──╼ $ ls
+AndroidManifest.xml  classes.dex  lib  META-INF  res  resources.arsc
+</code></pre><p>The downside of this technique is that the .xml files are barely readable. You can find some activity names and permissions, but the file is mostly gibberish.</p>
+<h2 id="Apktool-to-the-rescue"><a href="#Apktool-to-the-rescue" class="headerlink" title="Apktool to the rescue"></a>Apktool to the rescue</h2><pre><code>┌─[t0thkr1s@btksoftware]─[~/Downloads]
+└──╼ $ apktool d diva-beta.apk -o diva-beta
+I: Using Apktool 2.3.1-dirty on diva-beta.apk
+I: Loading resource table...
+I: Decoding AndroidManifest.xml with resources...
+I: Loading resource table from file: /home/t0thkr1s/.local/share/apktool/framework/1.apk
+I: Regular manifest package...
+I: Decoding file-resources...
+I: Decoding values */* XMLs...
+I: Baksmaling classes.dex...
+I: Copying assets and libs...
+I: Copying unknown files...
+I: Copying original files...
+┌─[t0thkr1s@btksoftware]─[~/Downloads]
+└──╼ $ cd diva-beta
+┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta]
+└──╼ $ ls
+AndroidManifest.xml  apktool.yml  lib  original  res  smali
+</code></pre><p>Apktool produces different files. This time, if you try to read the AndroidManifest.xml file, for example, you’ll get a fully readable and formatted .xml file. But, where are the source files? Apktool generates .smali files, which you can edit and then recompile the application.</p>
+<div class="addthis_tipjar_inline"></div>
+
+<h2 id="Source-files"><a href="#Source-files" class="headerlink" title="Source files"></a>Source files</h2><p>Let’s not concentrate on the XML files, we want the source code. Now, in order to read the classes.dex file, we can use an excellent tool called dex2jar. Head over to <a href="https://github.com/pxb1988/dex2jar/releases" target="_blank" rel="noopener">https://github.com/pxb1988/dex2jar/releases</a> and download the latest stable release. I added the contents of the zipped file to my PATH recursively, this way the usage in different directories is much easier.</p>
+<pre><code>┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta]
+└──╼ $ d2j-dex2jar.sh classes.dex
+dex2jar classes.dex -&gt; ./classes-dex2jar.jar
+┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta]
+└──╼ $ ls | grep *.jar
+classes-dex2jar.jar
+</code></pre><p>At this point, you have 2 options. If you like working in the command-line, then use jd-cmd, if you prefer GUI then you have JD-GUI. In this example, I’m going to use jd-cmd and show you its usage. In case you chose JD-GUI, all you have to do is open the .jar file and you’ll be presented with the decompiled .java source files. As for jd-cmd, here is how you do it:</p>
+<pre><code>┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta]
+└──╼ $ sudo java -jar ~/Downloads/jd-cli.jar classes-dex2jar.jar -od src
+[sudo] password for t0thkr1s:
+12:35:42.417 INFO  jd.cli.Main - Decompiling classes-dex2jar.jar
+12:35:42.420 INFO  jd.core.output.DirOutput - Directory output will be initialized for path src
+
+-- snip --
+
+12:35:46.245 INFO  jd.core.output.DirOutput - Finished with 1788 class file(s) and 0 resource file(s) written.
+┌─[t0thkr1s@btksoftware]─[~/Downloads/diva-beta/src/jakhar/aseem/diva]
+└──╼ $ ls
+ AccessControl1Activity.java             &apos;NotesProvider$DBHelper.java&apos;
+ AccessControl2Activity.java              NotesProvider.java
+ AccessControl3Activity.java             &apos;R$anim.java&apos;
+ AccessControl3NotesActivity.java        &apos;R$attr.java&apos;
+ APICreds2Activity.java                  &apos;R$bool.java&apos;
+ APICredsActivity.java                   &apos;R$color.java&apos;
+ BuildConfig.java                        &apos;R$dimen.java&apos;
+ DivaJni.java                            &apos;R$drawable.java&apos;
+ Hardcode2Activity.java                  &apos;R$id.java&apos;
+ HardcodeActivity.java                   &apos;R$integer.java&apos;
+ InputValidation2URISchemeActivity.java   R.java
+ InputValidation3Activity.java           &apos;R$layout.java&apos;
+ InsecureDataStorage1Activity.java       &apos;R$menu.java&apos;
+ InsecureDataStorage2Activity.java       &apos;R$mipmap.java&apos;
+ InsecureDataStorage3Activity.java       &apos;R$string.java&apos;
+ InsecureDataStorage4Activity.java       &apos;R$styleable.java&apos;
+ LogActivity.java                        &apos;R$style.java&apos;
+ MainActivity.java                        SQLInjectionActivity.java
+</code></pre><p>jd-cli.jar provides multiple command-line options. Here, I used <em>-od </em>to specify the output directory as <em>src</em>.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> jakhar.aseem.diva;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> android.os.Bundle;</span><br><span class="line"><span class="keyword">import</span> android.support.v7.app.AppCompatActivity;</span><br><span class="line"><span class="keyword">import</span> android.view.View;</span><br><span class="line"><span class="keyword">import</span> android.widget.EditText;</span><br><span class="line"><span class="keyword">import</span> android.widget.Toast;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HardcodeActivity</span></span></span><br><span class="line"><span class="class">  <span class="keyword">extends</span> <span class="title">AppCompatActivity</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">access</span><span class="params">(View paramView)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (((EditText)findViewById(<span class="number">2131492987</span>)).getText().toString().equals(<span class="string">"vendorsecretkey"</span>))</span><br><span class="line">    &#123;</span><br><span class="line">      Toast.makeText(<span class="keyword">this</span>, <span class="string">"Access granted! See you on the other side :)"</span>, <span class="number">0</span>).show();</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Toast.makeText(<span class="keyword">this</span>, <span class="string">"Access denied! See you in hell :D"</span>, <span class="number">0</span>).show();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle paramBundle)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(paramBundle);</span><br><span class="line">    setContentView(<span class="number">2130968607</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>I assume you can easily spot the hardcoded vendor secret key check. This is a very bad coding practice to hardcode secrets in source files. DIVA was created to present numerous vulnerabilities and bad practices. Check out the other activities to see them!</p>
+<p>I wrote a small shell script to automate these steps and properly reverse engineer Android applications. I may reveal it in my next post 😉</p>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Required-tools"><span class="toc-number">1.1.</span> <span class="toc-text">Required tools</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Apktool"><span class="toc-number">1.1.1.</span> <span class="toc-text">Apktool</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dex2Jar"><span class="toc-number">1.1.2.</span> <span class="toc-text">Dex2Jar</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JD-CMD"><span class="toc-number">1.1.3.</span> <span class="toc-text">JD-CMD</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JD-GUI"><span class="toc-number">1.1.4.</span> <span class="toc-text">JD-GUI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decompressing-APK-files"><span class="toc-number">1.2.</span> <span class="toc-text">Decompressing APK files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Apktool-to-the-rescue"><span class="toc-number">1.3.</span> <span class="toc-text">Apktool to the rescue</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Source-files"><span class="toc-number">1.4.</span> <span class="toc-text">Source files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&text=Reverse Engineering The DIVA Apk"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&title=Reverse Engineering The DIVA Apk"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Reverse Engineering The DIVA Apk&body=Check out this article: https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/24/Reverse-Engineering-The-DIVA-Apk/&title=Reverse Engineering The DIVA Apk"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

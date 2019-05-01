@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="The Vernam Cipher is based on the principle that each plaintext character from a message is ‘mixed’ with one character from a key stream. If a truly random key stream is used, the result will be a">
+<meta name="keywords" content="cryptography,cipher,vernam,encryption">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Vernam Cipher">
+<meta property="og:url" content="https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="The Vernam Cipher is based on the principle that each plaintext character from a message is ‘mixed’ with one character from a key stream. If a truly random key stream is used, the result will be a">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/the_vernam_cipher.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.400Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Vernam Cipher">
+<meta name="twitter:description" content="The Vernam Cipher is based on the principle that each plaintext character from a message is ‘mixed’ with one character from a key stream. If a truly random key stream is used, the result will be a">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/the_vernam_cipher.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>The Vernam Cipher</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/12/09/Fowsniff-Walkthrough/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/24/Reverse-Engineering-The-DIVA-Apk/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&text=The Vernam Cipher"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&title=The Vernam Cipher"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Vernam Cipher&body=Check out this article: https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&title=The Vernam Cipher"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#How-does-it-work"><span class="toc-number">1.</span> <span class="toc-text">How does it work?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Encryption"><span class="toc-number">2.</span> <span class="toc-text">Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decryption"><span class="toc-number">3.</span> <span class="toc-text">Decryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-full-source-code"><span class="toc-number">4.</span> <span class="toc-text">The full source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">5.</span> <span class="toc-text">Before you go</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        The Vernam Cipher
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-28T07:34:42.000Z" itemprop="datePublished">2018.11.28.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Cryptography/">Cryptography</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/cipher/">cipher</a>, <a class="tag-link" href="/tags/cryptography/">cryptography</a>, <a class="tag-link" href="/tags/encryption/">encryption</a>, <a class="tag-link" href="/tags/vernam/">vernam</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="the_vernam_cipher.png" alt></p>
+<blockquote>
+<p>The Vernam Cipher is based on the principle that each plaintext character from a message is ‘mixed’ with one character from a key stream. If a truly random key stream is used, the result will be a truly ‘random’ ciphertext which bears no relation to the original plaintext.</p>
+</blockquote>
+<center>- - - - - - - - - -</center>
+
+<h2 id="How-does-it-work"><a href="#How-does-it-work" class="headerlink" title="How does it work?"></a>How does it work?</h2><p>Let’s say we have a word “secret” and we want to encrypt with the key “key”. The length of the key (3) is obviously shorter than the length of the message (6). In this case, we repeat the key until it reaches the length of the plain message. The encryption key will be “keykey”.</p>
+<p>Next, we have to convert both the plain text and the key to binary.</p>
+<p><strong>Plain text message in binary:</strong></p>
+<center><em>011100110110010101100011011100100110010101110100</em></center>
+
+<p><strong>The key in binary:</strong></p>
+<center><em>011010110110010101111001011010110110010101111001</em></center>
+
+<p>Finally, we have to XOR these two binary values to get the encrypted message.</p>
+<blockquote>
+<p>0 ⊕ 0 = 0</p>
+<p>0 ⊕ 1 = 1</p>
+<p>1 ⊕ 0 = 1</p>
+<p>1 ⊕ 1 = 0</p>
+</blockquote>
+<p><strong>Encrypted message:</strong></p>
+<center><em>000110000000000000011010000110010000000000001101</em></center>
+
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h2><p>Th encrypt method takes 2 parameter a key and a message, which are required for the encryption. I initialized an index variable with a value of 0. It’s used for keeping track of the key length. The loop goes through the message character by character. In the loop, I calculate the ascii code for the current character both in the message and key and do a XOR operation on those values. I convert this back to a single char (might be a gibberish value) and append it to the <code>encrypted_message</code> variable. After this, the index needs to be incremented. If the index is equals with length of the key, then I set the index back to 0 to prevent possible index out of range exceptions.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(key, message)</span>:</span></span><br><span class="line">    encrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        encrypted_message = encrypted_message + chr(ord(char) ^ ord(key[index]))</span><br><span class="line">        index = index + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> index == len(key):</span><br><span class="line">            index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bin(int(binascii.hexlify(encrypted_message), <span class="number">16</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="Decryption"><a href="#Decryption" class="headerlink" title="Decryption"></a>Decryption</h2><p>As for the decryption, the procedure is almost exactly the same. The only thing that differs from the encryption is that I converted the encrypted message to binary, which is required for binary operations.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(key, message)</span>:</span></span><br><span class="line">    message = binascii.unhexlify(<span class="string">"%x"</span> % int(message, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    decrypted_message = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        decrypted_message = decrypted_message + chr(ord(char) ^ ord(key[index]))</span><br><span class="line">        index = index + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> index == len(key):</span><br><span class="line">            index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decrypted_message</span><br></pre></td></tr></table></figure>
+<div class="addthis_tipjar_inline"></div>
+
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="The-full-source-code"><a href="#The-full-source-code" class="headerlink" title="The full source code"></a>The full source code</h2><p>I created a command line program to make the code more usable. Actually, I just added some command line arguments. Anyway, I hope you like it!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(key, message)</span>:</span></span><br><span class="line">    encrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        encrypted_message = encrypted_message + chr(ord(char) ^ ord(key[index]))</span><br><span class="line">        index = index + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> index == len(key):</span><br><span class="line">            index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> bin(int(binascii.hexlify(encrypted_message), <span class="number">16</span>))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(key, message)</span>:</span></span><br><span class="line">    message = binascii.unhexlify(<span class="string">"%x"</span> % int(message, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    decrypted_message = <span class="string">''</span></span><br><span class="line"></span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        decrypted_message = decrypted_message + chr(ord(char) ^ ord(key[index]))</span><br><span class="line">        index = index + <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> index == len(key):</span><br><span class="line">            index = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decrypted_message</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    usage = <span class="string">"python vernam_cipher.py -e -m secret -k key\nor\n \ "</span> \</span><br><span class="line">            <span class="string">"python vernam_cipher.py -d -m 0b110000000000000011010000110010000000000001101 -k key"</span></span><br><span class="line">    description = <span class="string">"Command line program for demonstrating the Vernam cipher."</span></span><br><span class="line">    parser = argparse.ArgumentParser(usage=usage, description=description)</span><br><span class="line"></span><br><span class="line">    parser.add_argument(<span class="string">"-v"</span>, <span class="string">"--version"</span>, action=<span class="string">"version"</span>, version=<span class="string">"%(prog)s 1.0"</span>)</span><br><span class="line"></span><br><span class="line">    group = parser.add_mutually_exclusive_group(required=<span class="literal">True</span>)</span><br><span class="line">    group.add_argument(<span class="string">"-e"</span>, <span class="string">"--encrypt"</span>, action=<span class="string">"store_true"</span>, dest=<span class="string">"encrypt"</span>,</span><br><span class="line">                       help=<span class="string">"Encrypts the plain text message."</span>)</span><br><span class="line">    group.add_argument(<span class="string">"-d"</span>, <span class="string">"--decrypt"</span>, action=<span class="string">"store_true"</span>, dest=<span class="string">"decrypt"</span>,</span><br><span class="line">                       help=<span class="string">"Decrypts the encrypted message."</span>)</span><br><span class="line"></span><br><span class="line">    parser.add_argument(<span class="string">"-m"</span>, <span class="string">"--message"</span>, action=<span class="string">"store"</span>, required=<span class="literal">True</span>, dest=<span class="string">"message"</span>,</span><br><span class="line">                        help=<span class="string">"You need to specify the message. Like this: -m \"secret\""</span>)</span><br><span class="line"></span><br><span class="line">    parser.add_argument(<span class="string">"-k"</span>, <span class="string">"--key"</span>, action=<span class="string">"store"</span>, required=<span class="literal">True</span>, dest=<span class="string">"key"</span>,</span><br><span class="line">                        help=<span class="string">"You need to specify the key."</span>)</span><br><span class="line"></span><br><span class="line">    options = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> options.encrypt:</span><br><span class="line">        print(<span class="string">"The encrypted message is: "</span> + encrypt(options.key, options.message))</span><br><span class="line">    <span class="keyword">elif</span> options.decrypt:</span><br><span class="line">        print(<span class="string">"The decrypted message is: "</span> + decrypt(options.key, options.message))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<p>Feel free to download and experiment with the code, it’s the best way to learn new things!</p>
+<center>- - - - - - - - - -</center>
+
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#How-does-it-work"><span class="toc-number">1.</span> <span class="toc-text">How does it work?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Encryption"><span class="toc-number">2.</span> <span class="toc-text">Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decryption"><span class="toc-number">3.</span> <span class="toc-text">Decryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-full-source-code"><span class="toc-number">4.</span> <span class="toc-text">The full source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">5.</span> <span class="toc-text">Before you go</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&text=The Vernam Cipher"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&title=The Vernam Cipher"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Vernam Cipher&body=Check out this article: https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/28/The-Vernam-Cipher/&title=The Vernam Cipher"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

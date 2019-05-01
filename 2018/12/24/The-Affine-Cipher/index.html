@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Description The affine cipher is a type of monoalphabetic substitution cipher, wherein each letter in an alphabet is mapped to its numeric equivalent, encrypted using a simple mathematical function">
+<meta name="keywords" content="cryptography,cipher">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The Affine Cipher">
+<meta property="og:url" content="https://infosecadventures.com/2018/12/24/The-Affine-Cipher/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="Description The affine cipher is a type of monoalphabetic substitution cipher, wherein each letter in an alphabet is mapped to its numeric equivalent, encrypted using a simple mathematical function">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/12/24/The-Affine-Cipher/affine_cipher.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.399Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Affine Cipher">
+<meta name="twitter:description" content="Description The affine cipher is a type of monoalphabetic substitution cipher, wherein each letter in an alphabet is mapped to its numeric equivalent, encrypted using a simple mathematical function">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/12/24/The-Affine-Cipher/affine_cipher.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>The Affine Cipher</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/01/09/pWnOS-2-0-Walkthrough/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/12/12/Nmap-Cheatsheet/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&text=The Affine Cipher"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&title=The Affine Cipher"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Affine Cipher&body=Check out this article: https://infosecadventures.com/2018/12/24/The-Affine-Cipher/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&title=The Affine Cipher"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#How-does-it-work"><span class="toc-number">1.1.</span> <span class="toc-text">How does it work?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Encryption"><span class="toc-number">1.2.</span> <span class="toc-text">Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decryption"><span class="toc-number">1.3.</span> <span class="toc-text">Decryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-full-source-code"><span class="toc-number">1.4.</span> <span class="toc-text">The full source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        The Affine Cipher
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-24T16:15:22.000Z" itemprop="datePublished">2018.12.24.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Cryptography/">Cryptography</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/cipher/">cipher</a>, <a class="tag-link" href="/tags/cryptography/">cryptography</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="affine_cipher.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><blockquote>
+<p>The affine cipher is a type of monoalphabetic substitution cipher, wherein each letter in an alphabet is mapped to its numeric equivalent, encrypted using a simple mathematical function, and converted back to a letter. The formula used means that each letter encrypts to one other letter, and back again, meaning the cipher is essentially a standard substitution cipher with a rule governing which letter goes to which. As such, it has the weaknesses of all substitution ciphers.</p>
+</blockquote>
+<center>- - - - - - - - - -</center>
+
+<h2 id="How-does-it-work"><a href="#How-does-it-work" class="headerlink" title="How does it work?"></a>How does it work?</h2><p>Each letter is enciphered with the function <code>(a * x + b) mod 26</code>, where b is the magnitude of the shift. Let’s say we have a word “secret” and we want to encrypt it with <code>a = 5</code> and <code>b = 7</code>. These numbers are basically the encryption key.</p>
+<p>Now, we have to take the word letter by letter and find the position of every letter in the ABC. Keep in mind that counting starts from 0! Let me help you with the following table:</p>
+<p><br></p>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th style="text-align:center">B</th>
+<th style="text-align:center">C</th>
+<th style="text-align:center">D</th>
+<th style="text-align:center">E</th>
+<th style="text-align:center">F</th>
+<th style="text-align:center">G</th>
+<th style="text-align:center">H</th>
+<th style="text-align:center">I</th>
+<th style="text-align:center">J</th>
+<th style="text-align:center">K</th>
+<th style="text-align:center">L</th>
+<th style="text-align:center">M</th>
+<th style="text-align:center">N</th>
+<th style="text-align:center">O</th>
+<th style="text-align:center">P</th>
+<th style="text-align:center">Q</th>
+<th style="text-align:center">R</th>
+<th style="text-align:center">S</th>
+<th style="text-align:center">T</th>
+<th style="text-align:center">U</th>
+<th style="text-align:center">V</th>
+<th style="text-align:center">W</th>
+<th style="text-align:center">X</th>
+<th style="text-align:center">Y</th>
+<th style="text-align:left">Z</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">5</td>
+<td style="text-align:center">6</td>
+<td style="text-align:center">7</td>
+<td style="text-align:center">8</td>
+<td style="text-align:center">9</td>
+<td style="text-align:center">10</td>
+<td style="text-align:center">11</td>
+<td style="text-align:center">12</td>
+<td style="text-align:center">13</td>
+<td style="text-align:center">14</td>
+<td style="text-align:center">15</td>
+<td style="text-align:center">16</td>
+<td style="text-align:center">17</td>
+<td style="text-align:center">18</td>
+<td style="text-align:center">19</td>
+<td style="text-align:center">20</td>
+<td style="text-align:center">21</td>
+<td style="text-align:center">22</td>
+<td style="text-align:center">23</td>
+<td style="text-align:center">24</td>
+<td style="text-align:left">25</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+<p>All we have to do is substitute these number into the formula. The result will be the position of the encrypted letter in the ABC.</p>
+<p><strong>Plain text message:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">s</th>
+<th style="text-align:center">e</th>
+<th style="text-align:center">c</th>
+<th style="text-align:center">r</th>
+<th style="text-align:center">e</th>
+<th style="text-align:center">t</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">18</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">17</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">19</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Encrypting the letters:</strong></p>
+<center><br><code>5 * 18 + 7 mod 26 = 19</code><br><code>5 * 4 + 7 mod 26 = 1</code><br><code>5 * 2 + 7 mod 26 = 17</code><br><code>5 * 17 + 7 mod 26 = 14</code><br><code>5 * 4 + 7 mod 26 = 1</code><br><code>5 * 19 + 7 mod 26 = 24</code><br> </center>
+
+<p><strong>Encrypted message:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">19</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">17</th>
+<th style="text-align:center">14</th>
+<th style="text-align:center">1</th>
+<th style="text-align:center">24</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">t</td>
+<td style="text-align:center">b</td>
+<td style="text-align:center">r</td>
+<td style="text-align:center">o</td>
+<td style="text-align:center">b</td>
+<td style="text-align:center">y</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Encryption"><a href="#Encryption" class="headerlink" title="Encryption"></a>Encryption</h2><p>The encrypt method takes 2 parameters, a coefficients list which will have 2 elements and a message. I created 2 variable for the 2 coefficient and started iterating through the plain message letter by letter. I ignored every letter that is not in the alphabet and simply continued the loop.</p>
+<p>Next, I created a new <code>index</code> variable to store the current letter index. For better readability, I decided to store the result of the formula (the encrypted letter index) in a new variable.</p>
+<p>Finally, I appended that specific letter from the alphabet to the <code>encrypted_message</code> variable.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(coefficients, message)</span>:</span></span><br><span class="line">    message = message.upper()</span><br><span class="line">    encrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    coefficient_a = coefficients[<span class="number">0</span>]</span><br><span class="line">    coefficient_b = coefficients[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        <span class="keyword">if</span> char <span class="keyword">not</span> <span class="keyword">in</span> ALPHABET:</span><br><span class="line">          <span class="keyword">continue</span></span><br><span class="line">        index = ALPHABET.find(char)</span><br><span class="line">        encrypted_char_index = (coefficient_a * index + coefficient_b) % len(ALPHABET)</span><br><span class="line">        encrypted_message += ALPHABET[encrypted_char_index]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> encrypted_message</span><br></pre></td></tr></table></figure>
+<h2 id="Decryption"><a href="#Decryption" class="headerlink" title="Decryption"></a>Decryption</h2><p>As for the decryption, the procedure is a little different. The decryption formula is <code>a^-1 (x - b) mod 26</code>. For this to work, we have to find the modular multiplicative inverse of <code>a</code>. The modular multiplicative inverse of an integer <code>a</code> is an integer <code>x</code> such that the product <code>a * x</code> is congruent to 1 with respect to the modulus <code>m</code>. The multiplicative inverse of <code>a</code> only exists if <code>a</code> and <code>m</code> are coprime. Hence without the restriction on <code>a</code>, decryption might not be possible.</p>
+<p>I started a loop, which iterates through the length of the alphabet. If <code>a * i % 26</code> equals to 1, then we found our multiplicative inverse and we can continue with the next loop. In the second loop, I calculated the <code>decrypted_char_index</code> by substituting into the formula and at the end, I appended the decrypted letter to the <code>decrypted_message</code> variable.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(coefficients, message)</span>:</span></span><br><span class="line">    message = message.upper()</span><br><span class="line">    decrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    coefficient_a = coefficients[<span class="number">0</span>]</span><br><span class="line">    coefficient_b = coefficients[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    multiplicative_inverse = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(ALPHABET)):</span><br><span class="line">        <span class="keyword">if</span> coefficient_a * i % len(ALPHABET) == <span class="number">1</span>:</span><br><span class="line">            multiplicative_inverse = i</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> multiplicative_inverse <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Sorry, the decryption is not possible!"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        <span class="keyword">if</span> char <span class="keyword">not</span> <span class="keyword">in</span> ALPHABET:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        index = ALPHABET.find(char)</span><br><span class="line">        decrypted_char_index = (multiplicative_inverse * (index - coefficient_b)) % len(ALPHABET)</span><br><span class="line">        decrypted_message += ALPHABET[decrypted_char_index]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decrypted_message</span><br></pre></td></tr></table></figure>
+<div class="addthis_tipjar_inline"></div>
+
+<h2 id="The-full-source-code"><a href="#The-full-source-code" class="headerlink" title="The full source code"></a>The full source code</h2><p>I created a command line program so that you can try and test this whole thing out. Actually, I just added some command line arguments. Anyway, I hope you like it!</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line">ALPHABET = <span class="string">"ABCDEFGHIJKLMNOPQRSTUVWXYZ"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encrypt</span><span class="params">(coefficients, message)</span>:</span></span><br><span class="line">    message = message.upper()</span><br><span class="line">    encrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    coefficient_a = coefficients[<span class="number">0</span>]</span><br><span class="line">    coefficient_b = coefficients[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        <span class="keyword">if</span> char <span class="keyword">not</span> <span class="keyword">in</span> ALPHABET:</span><br><span class="line">            message = message.replace(char, <span class="string">""</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        index = ALPHABET.find(char)</span><br><span class="line">        encrypted_char_index = (coefficient_a * index + coefficient_b) % len(ALPHABET)</span><br><span class="line">        encrypted_message += ALPHABET[encrypted_char_index]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> encrypted_message</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">decrypt</span><span class="params">(coefficients, message)</span>:</span></span><br><span class="line">    message = message.upper()</span><br><span class="line">    decrypted_message = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    coefficient_a = coefficients[<span class="number">0</span>]</span><br><span class="line">    coefficient_b = coefficients[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    multiplicative_inverse = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(ALPHABET)):</span><br><span class="line">        <span class="keyword">if</span> coefficient_a * i % len(ALPHABET) == <span class="number">1</span>:</span><br><span class="line">            multiplicative_inverse = i</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> multiplicative_inverse <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Sorry, the decryption is not possible!"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> message:</span><br><span class="line">        <span class="keyword">if</span> char <span class="keyword">not</span> <span class="keyword">in</span> ALPHABET:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        index = ALPHABET.find(char)</span><br><span class="line">        decrypted_char_index = (multiplicative_inverse * (index - coefficient_b)) % len(ALPHABET)</span><br><span class="line">        decrypted_message += ALPHABET[decrypted_char_index]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> decrypted_message</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    usage = <span class="string">"python affine_cipher.py -e -m secret -c 5 7\nor\n"</span> \</span><br><span class="line">            <span class="string">"python affine_cipher.py -d -m tbroby -c 5 7"</span></span><br><span class="line"></span><br><span class="line">    description = <span class="string">"Command line program for demonstrating the Affine cipher."</span></span><br><span class="line"></span><br><span class="line">    parser = argparse.ArgumentParser(usage=usage, description=description)</span><br><span class="line">    parser.add_argument(<span class="string">"-v"</span>, <span class="string">"--version"</span>, action=<span class="string">"version"</span>, version=<span class="string">"%(affine_cipher)s 1.0"</span>)</span><br><span class="line"></span><br><span class="line">    group = parser.add_mutually_exclusive_group(required=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    group.add_argument(<span class="string">"-e"</span>, <span class="string">"--encrypt"</span>, action=<span class="string">"store_true"</span>, dest=<span class="string">"encrypt"</span>,</span><br><span class="line">                       help=<span class="string">"Encrypts the plain text message."</span>)</span><br><span class="line"></span><br><span class="line">    group.add_argument(<span class="string">"-d"</span>, <span class="string">"--decrypt"</span>, action=<span class="string">"store_true"</span>, dest=<span class="string">"decrypt"</span>,</span><br><span class="line">                       help=<span class="string">"Decrypts the encrypted message."</span>)</span><br><span class="line"></span><br><span class="line">    parser.add_argument(<span class="string">"-m"</span>, <span class="string">"--message"</span>, action=<span class="string">"store"</span>, required=<span class="literal">True</span>, dest=<span class="string">"message"</span>,</span><br><span class="line">                        help=<span class="string">"You need to specify the message. Like this: -m \"secret\""</span>)</span><br><span class="line"></span><br><span class="line">    parser.add_argument(<span class="string">"-c"</span>, <span class="string">"--coefficients"</span>, action=<span class="string">"store"</span>, required=<span class="literal">True</span>, type=int,</span><br><span class="line">                        nargs=<span class="number">2</span>, dest=<span class="string">"coefficients"</span>, help=<span class="string">"You need to specify the keys."</span>)</span><br><span class="line"></span><br><span class="line">    options = parser.parse_args()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> options.encrypt:</span><br><span class="line">        print(<span class="string">"The encrypted message is: "</span> + encrypt(options.coefficients, options.message))</span><br><span class="line">    <span class="keyword">elif</span> options.decrypt:</span><br><span class="line">        print(<span class="string">"The decrypted message is: "</span> + decrypt(options.coefficients, options.message))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<center>Feel free to download and experiment with the code,<br> it’s the best way to learn new things!</center>
+
+<center>- - - - - - - - - -</center>
+
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#How-does-it-work"><span class="toc-number">1.1.</span> <span class="toc-text">How does it work?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Encryption"><span class="toc-number">1.2.</span> <span class="toc-text">Encryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Decryption"><span class="toc-number">1.3.</span> <span class="toc-text">Decryption</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-full-source-code"><span class="toc-number">1.4.</span> <span class="toc-text">The full source code</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&text=The Affine Cipher"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&title=The Affine Cipher"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=The Affine Cipher&body=Check out this article: https://infosecadventures.com/2018/12/24/The-Affine-Cipher/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/24/The-Affine-Cipher/&title=The Affine Cipher"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

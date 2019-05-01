@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="About Nmap Nmap is used for network discovery and security auditing. In short, nmap displays exposed services on a target machine along with other useful information such as the version and OS dete">
+<meta name="keywords" content="penetration testing,cheatsheet,nmap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nmap Cheatsheet">
+<meta property="og:url" content="https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="About Nmap Nmap is used for network discovery and security auditing. In short, nmap displays exposed services on a target machine along with other useful information such as the version and OS dete">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/nmap_cheatsheet.png">
+<meta property="og:updated_time" content="2019-05-01T23:00:51.398Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nmap Cheatsheet">
+<meta name="twitter:description" content="About Nmap Nmap is used for network discovery and security auditing. In short, nmap displays exposed services on a target machine along with other useful information such as the version and OS dete">
+<meta name="twitter:image" content="https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/nmap_cheatsheet.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Nmap Cheatsheet</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2018/12/24/The-Affine-Cipher/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2018/12/09/Fowsniff-Walkthrough/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&text=Nmap Cheatsheet"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&title=Nmap Cheatsheet"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Nmap Cheatsheet&body=Check out this article: https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&title=Nmap Cheatsheet"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#About-Nmap"><span class="toc-number">1.</span> <span class="toc-text">About Nmap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-Connect"><span class="toc-number">1.1.</span> <span class="toc-text">TCP Connect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-Scan"><span class="toc-number">1.2.</span> <span class="toc-text">UDP Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SYN-Scan"><span class="toc-number">1.3.</span> <span class="toc-text">SYN Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FIN-Scan"><span class="toc-number">1.4.</span> <span class="toc-text">FIN Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACK-Scan"><span class="toc-number">1.5.</span> <span class="toc-text">ACK Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NULL-Scan"><span class="toc-number">1.6.</span> <span class="toc-text">NULL Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XMAS-Scan"><span class="toc-number">1.7.</span> <span class="toc-text">XMAS Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC-Scan"><span class="toc-number">1.8.</span> <span class="toc-text">RPC Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDLE-Scan"><span class="toc-number">1.9.</span> <span class="toc-text">IDLE Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scan-Techniques"><span class="toc-number">1.10.</span> <span class="toc-text">Scan Techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Discovery"><span class="toc-number">1.11.</span> <span class="toc-text">Host Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-Specification"><span class="toc-number">1.12.</span> <span class="toc-text">Port Specification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-and-Version-Detection"><span class="toc-number">1.13.</span> <span class="toc-text">Service and Version Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OS-Detection"><span class="toc-number">1.14.</span> <span class="toc-text">OS Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Timing-and-Performance"><span class="toc-number">1.15.</span> <span class="toc-text">Timing and Performance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSE-Scripts"><span class="toc-number">1.16.</span> <span class="toc-text">NSE Scripts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.17.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Nmap Cheatsheet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-12-12T10:07:01.000Z" itemprop="datePublished">2018.12.12.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Penetration-Testing/">Penetration Testing</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/cheatsheet/">cheatsheet</a>, <a class="tag-link" href="/tags/nmap/">nmap</a>, <a class="tag-link" href="/tags/penetration-testing/">penetration testing</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="nmap_cheatsheet.png" alt></p>
+<h1 id="About-Nmap"><a href="#About-Nmap" class="headerlink" title="About Nmap"></a>About Nmap</h1><blockquote>
+<p>Nmap is used for network discovery and security auditing. In short, nmap displays exposed services on a target machine along with other useful information such as the version and OS detection. It’s also open-source!</p>
+</blockquote>
+<h2 id="TCP-Connect"><a href="#TCP-Connect" class="headerlink" title="TCP Connect"></a>TCP Connect</h2><p>TCP Connect scan completes the 3-way handshake. If a port is open, the operating system completed the TCP three-way handshake and the port scanner immediately closes the connection to avoid DOS. This is “noisy” because the services can log the sender IP address and might trigger Intrusion Detection Systems.</p>
+<h2 id="UDP-Scan"><a href="#UDP-Scan" class="headerlink" title="UDP Scan"></a>UDP Scan</h2><p>This scan checks to see if there are any UDP ports listening. Since UDP does not respond with a positive acknowledgment like TCP and only responds to an incoming UDP packet when the port is closed, this type of scan can sometimes show false positives. However, it can also reveal Trojan horses running on high UDP ports and hidden RPC services. It may be quite slow since some machines intentionally slow down responses to this kind of traffic to avoid being overwhelmed. Machines running Windows OS, however, do not implement this slowdown feature, so you should be able to use UDP to scan Windows hosts normally.</p>
+<h2 id="SYN-Scan"><a href="#SYN-Scan" class="headerlink" title="SYN Scan"></a>SYN Scan</h2><p>SYN scan is another form of TCP scanning. Rather than using the operating system’s network functions, the port scanner generates raw IP packets itself, and monitors for responses. This scan type is also known as “half-open scanning” because it never actually opens a full TCP connection. The port scanner generates an SYN packet. If the target port is open, it will respond with an SYN-ACK packet. The scanner host responds with an RST packet, closing the connection before the handshake is completed. If the port is closed but unfiltered, the target will instantly respond with an RST packet. There is debate over which scan is less intrusive on the target host. SYN scan has the advantage that the individual services never actually receive a connection.</p>
+<h2 id="FIN-Scan"><a href="#FIN-Scan" class="headerlink" title="FIN Scan"></a>FIN Scan</h2><p>This is a stealthy scan, like the SYN scan, but sends a TCP FIN packet instead. Most but not all computers will send an RST packet back if they get this input, so the FIN scan can show false positives and negatives, but it may get under the radar of some IDS programs and other countermeasures.</p>
+<h2 id="ACK-Scan"><a href="#ACK-Scan" class="headerlink" title="ACK Scan"></a>ACK Scan</h2><p>Ack scanning determines whether the port is filtered or not. This is especially good when attempting to probe for the existence of a firewall and its rulesets. Simple packet filtering will allow established connections (packets with the ACK bit set), whereas a more sophisticated stateful firewall might not.</p>
+<h2 id="NULL-Scan"><a href="#NULL-Scan" class="headerlink" title="NULL Scan"></a>NULL Scan</h2><p>Another very stealthy scan that sets all the TCP header flags to off or null. This is not normally a valid packet and some hosts will not know what to do with this. Windows operating systems are in this group, and scanning them with NULL scans will produce unreliable results. However, for non-Windows servers protected by a firewall, this can be a way to get through.</p>
+<h2 id="XMAS-Scan"><a href="#XMAS-Scan" class="headerlink" title="XMAS Scan"></a>XMAS Scan</h2><p>Similar to the NULL scan except for all the flags in the TCP header is set to on. Windows machines won’t respond to this due to the way their TCP stack is implemented. Xmas scans derive their name from the set of flags that are turned on within a packet. These scans are designed to manipulate the PSH, URG and FIN flags of the TCP header.</p>
+<h2 id="RPC-Scan"><a href="#RPC-Scan" class="headerlink" title="RPC Scan"></a>RPC Scan</h2><p>This special type of scan looks for machines answering to RPC (Remote Procedure Call) services. RPC, which allows remote commands to be run on the machine under certain conditions, can be a dangerous service. Since RPC services can run on many different ports, it is hard to tell from a normal scan which ones might be running RPC. This scan will probe the ports found open on a machine with commands to show the program name and version if RPC is running. It’s not a bad idea to run one of these scans every so often just to find out if and where you have these services running.</p>
+<h2 id="IDLE-Scan"><a href="#IDLE-Scan" class="headerlink" title="IDLE Scan"></a>IDLE Scan</h2><p>It is a super stealthy method whereby the scan packets are bounced off an external host. You don’t need to have control over the other host but it does have to set up and meet certain requirements. You must input the IP address of our “zombie” host and what port number to use. It is one of the more controversial options in Nmap since it really only has a use for malicious attacks.</p>
+<div class="addthis_tipjar_inline"></div>
+
+<center>- - - - - - - - - -</center>
+
+<h2 id="Scan-Techniques"><a href="#Scan-Techniques" class="headerlink" title="Scan Techniques"></a>Scan Techniques</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-sS</td>
+<td style="text-align:center">TCP SYN port scan.</td>
+<td style="text-align:center">nmap -sS 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-sT</td>
+<td style="text-align:center">TCP Connect port scan.</td>
+<td style="text-align:center">nmap -sT 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-sU</td>
+<td style="text-align:center">UDP port scan.</td>
+<td style="text-align:center">nmap -sU 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-sA</td>
+<td style="text-align:center">TCP ACK port scan.</td>
+<td style="text-align:center">nmap -sA 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Host-Discovery"><a href="#Host-Discovery" class="headerlink" title="Host Discovery"></a>Host Discovery</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-Pn</td>
+<td style="text-align:center">Only port scan.</td>
+<td style="text-align:center">nmap -Pn 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-sn</td>
+<td style="text-align:center">Only host discovery.</td>
+<td style="text-align:center">nmap -sn 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-PR</td>
+<td style="text-align:center">ARP discovery on local network.</td>
+<td style="text-align:center">nmap -PR 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-n</td>
+<td style="text-align:center">Disable DNS resolution.</td>
+<td style="text-align:center">nmap -n 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Port-Specification"><a href="#Port-Specification" class="headerlink" title="Port Specification"></a>Port Specification</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-p</td>
+<td style="text-align:center">Port or port range.</td>
+<td style="text-align:center">nmap -p 22-80 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-p-</td>
+<td style="text-align:center">Scan all ports.</td>
+<td style="text-align:center">nmap -p- 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-F</td>
+<td style="text-align:center">Fast port scan. (top 100)</td>
+<td style="text-align:center">nmap -F 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Service-and-Version-Detection"><a href="#Service-and-Version-Detection" class="headerlink" title="Service and Version Detection"></a>Service and Version Detection</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-sV</td>
+<td style="text-align:center">Detect the version of services.</td>
+<td style="text-align:center">nmap -sV 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-A</td>
+<td style="text-align:center">Enable OS detection, version detection, script scanning and trace route.</td>
+<td style="text-align:center">nmap -A 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="OS-Detection"><a href="#OS-Detection" class="headerlink" title="OS Detection"></a>OS Detection</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-O</td>
+<td style="text-align:center">Identify OS using TCP/IP strack fingerprinting.</td>
+<td style="text-align:center">nmap -O 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Timing-and-Performance"><a href="#Timing-and-Performance" class="headerlink" title="Timing and Performance"></a>Timing and Performance</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-T0</td>
+<td style="text-align:center">Paranoid IDS evasion.</td>
+<td style="text-align:center">nmap -T0 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-T1</td>
+<td style="text-align:center">Sneaky IDS evasion.</td>
+<td style="text-align:center">nmap -T1 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-T2</td>
+<td style="text-align:center">Polite IDS evasion. (requires less bandwidth)</td>
+<td style="text-align:center">nmap -T2 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-T3</td>
+<td style="text-align:center">Normal IDS evasion. (default)</td>
+<td style="text-align:center">nmap -T3 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-T4</td>
+<td style="text-align:center">Aggressive speed scan. (requires fast network)</td>
+<td style="text-align:center">nmap -T4 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">-T5</td>
+<td style="text-align:center">Insane speed scan. (requires massive network speed)</td>
+<td style="text-align:center">nmap -T5 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="NSE-Scripts"><a href="#NSE-Scripts" class="headerlink" title="NSE Scripts"></a>NSE Scripts</h2><table>
+<thead>
+<tr>
+<th style="text-align:center">Switch</th>
+<th style="text-align:center">Description</th>
+<th style="text-align:center">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">-sC</td>
+<td style="text-align:center">Default script scan.</td>
+<td style="text-align:center">nmap -sC 192.168.1.1</td>
+</tr>
+<tr>
+<td style="text-align:center">–script banner</td>
+<td style="text-align:center">Specify single script. (banner grabbing)</td>
+<td style="text-align:center">nmap –script banner 192.168.1.1</td>
+</tr>
+</tbody>
+</table>
+<p><br><center>- - - - - - - - - -</center></p>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedbacks and donations always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#About-Nmap"><span class="toc-number">1.</span> <span class="toc-text">About Nmap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-Connect"><span class="toc-number">1.1.</span> <span class="toc-text">TCP Connect</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UDP-Scan"><span class="toc-number">1.2.</span> <span class="toc-text">UDP Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SYN-Scan"><span class="toc-number">1.3.</span> <span class="toc-text">SYN Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#FIN-Scan"><span class="toc-number">1.4.</span> <span class="toc-text">FIN Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ACK-Scan"><span class="toc-number">1.5.</span> <span class="toc-text">ACK Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NULL-Scan"><span class="toc-number">1.6.</span> <span class="toc-text">NULL Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XMAS-Scan"><span class="toc-number">1.7.</span> <span class="toc-text">XMAS Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RPC-Scan"><span class="toc-number">1.8.</span> <span class="toc-text">RPC Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDLE-Scan"><span class="toc-number">1.9.</span> <span class="toc-text">IDLE Scan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scan-Techniques"><span class="toc-number">1.10.</span> <span class="toc-text">Scan Techniques</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Discovery"><span class="toc-number">1.11.</span> <span class="toc-text">Host Discovery</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Port-Specification"><span class="toc-number">1.12.</span> <span class="toc-text">Port Specification</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Service-and-Version-Detection"><span class="toc-number">1.13.</span> <span class="toc-text">Service and Version Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#OS-Detection"><span class="toc-number">1.14.</span> <span class="toc-text">OS Detection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Timing-and-Performance"><span class="toc-number">1.15.</span> <span class="toc-text">Timing and Performance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NSE-Scripts"><span class="toc-number">1.16.</span> <span class="toc-text">NSE Scripts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">1.17.</span> <span class="toc-text">Before you go</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&text=Nmap Cheatsheet"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&title=Nmap Cheatsheet"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Nmap Cheatsheet&body=Check out this article: https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2018/12/12/Nmap-Cheatsheet/&title=Nmap Cheatsheet"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
