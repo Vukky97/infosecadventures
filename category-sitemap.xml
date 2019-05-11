@@ -8,36 +8,36 @@
     </url>
 
     <url>
-        <loc>https://infosecadventures.com/categories/CTF-Walkthroughs/</loc>
-        <lastmod>2019-05-01T23:00:51.401Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://infosecadventures.com/categories/Cryptography/</loc>
-        <lastmod>2019-05-01T23:00:51.400Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://infosecadventures.com/categories/Penetration-Testing/</loc>
-        <lastmod>2019-05-01T23:00:51.398Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>https://infosecadventures.com/categories/Android-Security/</loc>
-        <lastmod>2019-05-01T23:00:51.398Z</lastmod>
+        <lastmod>2019-05-11T15:07:17.236Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/categories/CTF-Walkthroughs/</loc>
+        <lastmod>2019-05-11T15:05:21.378Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://infosecadventures.com/categories/Wireless-Hacking/</loc>
-        <lastmod>2019-05-01T23:00:51.394Z</lastmod>
+        <lastmod>2019-05-11T15:05:13.260Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/categories/Penetration-Testing/</loc>
+        <lastmod>2019-05-11T15:04:58.995Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/categories/Cryptography/</loc>
+        <lastmod>2019-05-11T15:04:49.578Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

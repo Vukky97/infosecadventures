@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang=en>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Frida is a dynamic instrumentation toolkit for developers,reverse-engineers, and security researchers.  Project requirementsRequired tools to follow along:  Java decompiler (JD-GUI) Android emulat">
+<meta name="keywords" content="security,reverse engineering,android,dynamic instrumentation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Introduction to Frida">
+<meta property="og:url" content="https://infosecadventures.com/2019/05/11/Introduction-to-Frida/index.html">
+<meta property="og:site_name" content="InfoSec Adventures">
+<meta property="og:description" content="Frida is a dynamic instrumentation toolkit for developers,reverse-engineers, and security researchers.  Project requirementsRequired tools to follow along:  Java decompiler (JD-GUI) Android emulat">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://infosecadventures.com/2019/05/11/Introduction-to-Frida/frida.png">
+<meta property="og:updated_time" content="2019-05-11T15:07:17.236Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Introduction to Frida">
+<meta name="twitter:description" content="Frida is a dynamic instrumentation toolkit for developers,reverse-engineers, and security researchers.  Project requirementsRequired tools to follow along:  Java decompiler (JD-GUI) Android emulat">
+<meta name="twitter:image" content="https://infosecadventures.com/2019/05/11/Introduction-to-Frida/frida.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/android-chrome-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+
+    <title>Introduction to Frida</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    
+    
+    
+      <link rel="alternate" href="/atom.xml" title="InfoSec Adventures" type="application/atom+xml">
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/03/31/Hack-The-Box-Curling-Walkthrough/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&text=Introduction to Frida"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&title=Introduction to Frida"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Introduction to Frida&body=Check out this article: https://infosecadventures.com/2019/05/11/Introduction-to-Frida/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&title=Introduction to Frida"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-requirements"><span class="toc-number">1.</span> <span class="toc-text">Project requirements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Android-application"><span class="toc-number">2.</span> <span class="toc-text">The Android application</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-a-virtual-device"><span class="toc-number">3.</span> <span class="toc-text">Creating a virtual device</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse-engineering"><span class="toc-number">4.</span> <span class="toc-text">Reverse engineering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PIN-Bypass"><span class="toc-number">5.</span> <span class="toc-text">PIN Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PIN-Brute-force"><span class="toc-number">6.</span> <span class="toc-text">PIN Brute-force</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Root-Check-Bypass"><span class="toc-number">7.</span> <span class="toc-text">Root Check Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Finding-the-Encryption-Key"><span class="toc-number">8.</span> <span class="toc-text">Finding the Encryption Key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">9.</span> <span class="toc-text">Before you go</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Introduction to Frida
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">InfoSec Adventures</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-05-11T09:15:57.000Z" itemprop="datePublished">2019.05.11.</time>
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/Android-Security/">Android Security</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/android/">android</a>, <a class="tag-link" href="/tags/dynamic-instrumentation/">dynamic instrumentation</a>, <a class="tag-link" href="/tags/reverse-engineering/">reverse engineering</a>, <a class="tag-link" href="/tags/security/">security</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5bf72b3154516f79"></script>
+
+<p><img src="frida.png" alt></p>
+<blockquote>
+<p>Frida is a dynamic instrumentation toolkit for developers,<br>reverse-engineers, and security researchers.</p>
+</blockquote>
+<h2 id="Project-requirements"><a href="#Project-requirements" class="headerlink" title="Project requirements"></a>Project requirements</h2><p>Required tools to follow along:</p>
+<ul>
+<li>Java decompiler (JD-GUI)</li>
+<li>Android emulator (Genymotion)</li>
+<li>Dynamic instrumentation toolkit (Frida)</li>
+</ul>
+<p>You’ll need to download 3 files from here: <a href="https://github.com/frida/frida/releases" target="_blank" rel="noopener">https://github.com/frida/frida/releases</a></p>
+<ul>
+<li>Python-frida</li>
+<li>Python-frida-tools</li>
+<li>Frida-server-android</li>
+</ul>
+<p>Depending on your distribution, you can easily install the first two and their dependencies. As for the frida-server-android, I’m going to walk you through the installation and emulator setup.</p>
+<h2 id="The-Android-application"><a href="#The-Android-application" class="headerlink" title="The Android application"></a>The Android application</h2><p>I created an Android application just for demonstration and testing purposes. I’m going to use it during the examples, you can download it from Github: <a href="https://github.com/t0thkr1s/frida-demo/releases" target="_blank" rel="noopener">https://github.com/t0thkr1s/frida-demo/releases</a></p>
+<h2 id="Creating-a-virtual-device"><a href="#Creating-a-virtual-device" class="headerlink" title="Creating a virtual device"></a>Creating a virtual device</h2><p>I added a new Genymotion virtual device with Android version 5.0 (API 21).<br>The setup is pretty straightforward just the usual next, next and finish. It’s time to download the <a href="https://github.com/frida/frida/releases" target="_blank" rel="noopener">Frida Server</a> for the Android client. Don’t forget to check the correct architecture! Next, we need to upload the server to the emulator. I installed Genymotion in the /opt directory</p>
+<pre><code>t0thkr1s@btksoftware:/opt/genymobile/genymotion/tools$ ls
+aapt  adb  glewinfo  lib64
+</code></pre><p>Uploading the file:</p>
+<pre><code>./adb push ~/Downloads/frida_server /data/local/tmp/
+</code></pre><p>Changing file permissions:</p>
+<pre><code>./adb shell &quot;chmod 755 /data/local/tmp/frida_server&quot;
+</code></pre><p>Running the server in detached mode:</p>
+<pre><code>./adb shell &quot;/data/local/tmp/frida_server &amp;&quot;
+</code></pre><p>Now, the emulator is ready and the server is running!</p>
+<h2 id="Reverse-engineering"><a href="#Reverse-engineering" class="headerlink" title="Reverse engineering"></a>Reverse engineering</h2><p>In order to understand the inner workings of an application, we need to reverse engineer it. Fortunately, we can restore the java source files easily.</p>
+<p>I’m not going to write about reverse engineering Android apps here, because I already did it in my previous post. <a href="https://medium.com/btk-software/reverse-engineering-diva-application-d59e1b242208" target="_blank" rel="noopener">Check it out!</a></p>
+<p>I have to admit that the reverse engineering of the demo application reveals all the secrets hidden in it. So, in order to make it more realistic let’s suppose the encryption key is generated from the user-provided PIN code which is used to encrypt private data in the app.</p>
+<p>In this case, brute-forcing the PIN code might be a good solution for compromising the security of the whole app. That’s why you need to choose long and strong PINs.</p>
+<h2 id="PIN-Bypass"><a href="#PIN-Bypass" class="headerlink" title="PIN Bypass"></a>PIN Bypass</h2><p>Okay, you looked through the reversed source code and you found a method, which checks if the provided PIN is correct or not.</p>
+<blockquote>
+<p>Spoiler: The PIN is in the strings.xml file.</p>
+</blockquote>
+<p>Most of the time, it’s not that easy… Let’s suppose, we don’t know the PIN. You found the <em>PinUtil</em> class and the <em>boolean</em> <em>checkPin(String pin) </em>method. This checks the pin and returns true if the pin is correct, otherwise, it returns false.</p>
+<p>The idea here is that we don’t need to know the pin just return true and we’re in. The following python script does just like that. I wrote a little Javascript code using the Javascript API and hardcoded it in the python script. Basically, it uses the <em>PinUtil’</em>s <em>checkPin()</em> method and overrides the return value. It’s that easy. Next, you need to specify the package name of the application to attach Frida, then load the script and wait for the log messages.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> frida, sys</span><br><span class="line">jscode = <span class="string">"""</span></span><br><span class="line"><span class="string">Java.perform(function() &#123;</span></span><br><span class="line"><span class="string"> console.log("[ * ] Starting implementation override...")</span></span><br><span class="line"><span class="string"> var MainActivity = Java.use("infosecadventures.fridademo.utils.PinUtil");</span></span><br><span class="line"><span class="string"> MainActivity.checkPin.implementation = function(pin)&#123;</span></span><br><span class="line"><span class="string">     console.log("[ + ] PIN check successfully bypassed!")</span></span><br><span class="line"><span class="string">     return true;</span></span><br><span class="line"><span class="string"> &#125;</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line">process = frida.get_usb_device().attach(<span class="string">'infosecadventures.fridademo'</span>)</span><br><span class="line">script = process.create_script(jscode)</span><br><span class="line">print(<span class="string">'[ * ] Running Frida Demo application'</span>)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
+<h2 id="PIN-Brute-force"><a href="#PIN-Brute-force" class="headerlink" title="PIN Brute-force"></a>PIN Brute-force</h2><p>Previously, I mentioned that knowing the PIN could be really beneficial. In this example, I going to show you how to brute-force with Frida.</p>
+<p>First, let’s suppose that the <em>PinUtil</em>’s <em>checkPin(String pin)</em> method is not static. By using <em>Java.choose, </em>we can search the memory for a <em>PinUtil</em> instance and the <em>onMatch</em> is called when the instance is found. Then, we can use that instance’s method<em> </em>in a loop to test all numbers with a length of 4. This is actually not a time-consuming process. You can even try brute-forcing numbers with a length of 5 and finish in a day depending on the number.</p>
+<p>The <em>PinUtil</em>’s class <em>checkPin(String pin)</em> function is static. This means that we don’t need to search for the <em>PinUtil</em> object in the memory just call the method using the class name. However, I implemented both (static and non-static solution) in the script below. I hope it’s not confusing. The <em>jscode</em> variable will be overridden by the second assignment and that will be used.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> frida, sys</span><br><span class="line"></span><br><span class="line"><span class="comment"># For non-static classes</span></span><br><span class="line">jscode = <span class="string">"""</span></span><br><span class="line"><span class="string">Java.perform(function() &#123;</span></span><br><span class="line"><span class="string"> console.log("[ * ] Starting PIN Brute-force, please wait...");</span></span><br><span class="line"><span class="string"> Java.choose("infosecadventures.fridademo.utils.PinUtil", &#123;</span></span><br><span class="line"><span class="string">  onMatch: function(instance) &#123;</span></span><br><span class="line"><span class="string">   console.log("[ * ] Instance found in memory: " + instance);</span></span><br><span class="line"><span class="string">   for(var i = 1000; i &lt; 9999; i++)&#123;</span></span><br><span class="line"><span class="string">    if(instance.checkPin(i + "") == true)&#123;</span></span><br><span class="line"><span class="string">     console.log("[ + ] Found correct PIN: " + i);</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">   &#125;</span></span><br><span class="line"><span class="string">  &#125;,</span></span><br><span class="line"><span class="string">  onComplete: function() &#123; &#125;</span></span><br><span class="line"><span class="string"> &#125;);</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># For static classes</span></span><br><span class="line">jscode = <span class="string">"""</span></span><br><span class="line"><span class="string">Java.perform(function () &#123;</span></span><br><span class="line"><span class="string">    console.log("[ * ] Starting PIN Brute-force, please wait...")</span></span><br><span class="line"><span class="string">    var PinUtil = Java.use("infosecadventures.fridademo.utils.PinUtil");</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    for(var i=1000; i &lt; 9999; i++)</span></span><br><span class="line"><span class="string">    &#123;</span></span><br><span class="line"><span class="string">        if(PinUtil.checkPin(i+"") == true)&#123;</span></span><br><span class="line"><span class="string">            console.log("[ + ] Found correct PIN: " + i);</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line">process = frida.get_usb_device().attach(<span class="string">'infosecadventures.fridademo'</span>)</span><br><span class="line">script = process.create_script(jscode)</span><br><span class="line">print(<span class="string">'[ * ] Running Frida Demo application'</span>)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
+<div class="addthis_tipjar_inline"></div>
+
+<h2 id="Root-Check-Bypass"><a href="#Root-Check-Bypass" class="headerlink" title="Root Check Bypass"></a>Root Check Bypass</h2><p>I included this example because it’s quite common in banking and other applications to restrict rooted device access. It’s a simple check and very, very similar to the PIN bypass example.</p>
+<blockquote>
+<p>I encourage you to write the script yourself and check back, when you finished!</p>
+</blockquote>
+<h2 id="Finding-the-Encryption-Key"><a href="#Finding-the-Encryption-Key" class="headerlink" title="Finding the Encryption Key"></a>Finding the Encryption Key</h2><p>Now, everything in this script should also be familiar to you. You can log a method’s incoming parameters and return normally. This way, we have the ability to log the encryption key used and also the plain text. Again, the key is hardcoded in the code, but you won’t always be this lucky in real life. Here is how I implemented this:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> frida, sys</span><br><span class="line"></span><br><span class="line">jscode = <span class="string">"""</span></span><br><span class="line"><span class="string">Java.perform(function() &#123;</span></span><br><span class="line"><span class="string"> console.log("[ * ] Starting implementation override...")</span></span><br><span class="line"><span class="string"> var EncryptionUtil = Java.use("infosecadventures.fridademo.utils.EncryptionUtil");</span></span><br><span class="line"><span class="string"> EncryptionUtil.encrypt.implementation = function(key, value)&#123;</span></span><br><span class="line"><span class="string">            console.log("Key: ");</span></span><br><span class="line"><span class="string">            console.log(key);</span></span><br><span class="line"><span class="string">            console.log("Value: ");</span></span><br><span class="line"><span class="string">            console.log(value);</span></span><br><span class="line"><span class="string">     return this.encrypt(key, value);</span></span><br><span class="line"><span class="string"> &#125;</span></span><br><span class="line"><span class="string">&#125;);</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line">process = frida.get_usb_device().attach(<span class="string">'infosecadventures.fridademo'</span>)</span><br><span class="line">script = process.create_script(jscode)</span><br><span class="line">print(<span class="string">'[ * ] Running Frida Demo application'</span>)</span><br><span class="line">script.load()</span><br><span class="line">sys.stdin.read()</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Modify these script and experiment with them.<br>It’s the best way to learn new things!</p>
+</blockquote>
+<h2 id="Before-you-go"><a href="#Before-you-go" class="headerlink" title="Before you go"></a>Before you go</h2><p>If you found this article helpful, please share to help others with similar interest find it! + Feedback and donations are always welcome!</p>
+<p><br><div align="center" class="addthis_inline_share_toolbox"></div><br></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Project-requirements"><span class="toc-number">1.</span> <span class="toc-text">Project requirements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Android-application"><span class="toc-number">2.</span> <span class="toc-text">The Android application</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Creating-a-virtual-device"><span class="toc-number">3.</span> <span class="toc-text">Creating a virtual device</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Reverse-engineering"><span class="toc-number">4.</span> <span class="toc-text">Reverse engineering</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PIN-Bypass"><span class="toc-number">5.</span> <span class="toc-text">PIN Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PIN-Brute-force"><span class="toc-number">6.</span> <span class="toc-text">PIN Brute-force</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Root-Check-Bypass"><span class="toc-number">7.</span> <span class="toc-text">Root Check Bypass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Finding-the-Encryption-Key"><span class="toc-number">8.</span> <span class="toc-text">Finding the Encryption Key</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Before-you-go"><span class="toc-number">9.</span> <span class="toc-text">Before you go</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&text=Introduction to Frida"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&title=Introduction to Frida"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Introduction to Frida&body=Check out this article: https://infosecadventures.com/2019/05/11/Introduction-to-Frida/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=https://infosecadventures.com/2019/05/11/Introduction-to-Frida/&title=Introduction to Frida"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <!--<a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>-->
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Kristof Toth
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Articles</a></li>
+         
+          <li><a href="/categories/">Categories</a></li>
+         
+          <li><a href="/instagram/">Instagram Feed</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-131012780-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'infosecadventures';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
