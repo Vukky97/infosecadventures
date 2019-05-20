@@ -3,14 +3,35 @@
 
 
     <url>
-        <loc>https://infosecadventures.com/tags/dynamic-instrumentation/</loc>
-        <lastmod>2019-05-11T15:07:17.236Z</lastmod>
+        <loc>https://infosecadventures.com/tags/walkthrough/</loc>
+        <lastmod>2019-05-20T14:06:41.483Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/tags/ctf/</loc>
+        <lastmod>2019-05-20T14:06:41.483Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/tags/vulnhub/</loc>
+        <lastmod>2019-05-20T14:06:41.483Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>https://infosecadventures.com/tags/android/</loc>
+        <lastmod>2019-05-11T15:07:17.236Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>https://infosecadventures.com/tags/dynamic-instrumentation/</loc>
         <lastmod>2019-05-11T15:07:17.236Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -33,27 +54,6 @@
     <url>
         <loc>https://infosecadventures.com/tags/HackTheBox/</loc>
         <lastmod>2019-05-11T15:05:21.378Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://infosecadventures.com/tags/walkthrough/</loc>
-        <lastmod>2019-05-11T15:05:21.378Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://infosecadventures.com/tags/ctf/</loc>
-        <lastmod>2019-05-11T15:05:21.378Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>https://infosecadventures.com/tags/vulnhub/</loc>
-        <lastmod>2019-05-11T15:05:19.284Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

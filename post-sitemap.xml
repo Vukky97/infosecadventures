@@ -8,6 +8,14 @@
     </url>
 
     <url>
+        <loc>https://infosecadventures.com/2019/05/16/HackInOs-Walkthrough/</loc>
+        <lastmod>2019-05-20T14:06:41.483Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>https://infosecadventures.com/2019/05/11/Introduction-to-Frida/</loc>
         <lastmod>2019-05-11T15:07:17.236Z</lastmod>
         <changefreq>weekly</changefreq>
